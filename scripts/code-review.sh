@@ -46,7 +46,7 @@ echo -e "\n${BLUE}🔍 Running ktlint analysis...${NC}"
 # Analyze results for changed files
 TOTAL_ISSUES=0
 echo -e "\n${BLUE}📊 Analysis Results:${NC}"
-echo "$CHANGED_FILES" | while read file; do
+while read -r file; do
     if [ -n "$file" ]; then
         # Look for issues in this specific file (match the file pattern from ktlint output)
         ISSUES=$(grep -F -c "$(basename "$file"):" ktlint-output.tmp 2>/dev/null || echo "0")
