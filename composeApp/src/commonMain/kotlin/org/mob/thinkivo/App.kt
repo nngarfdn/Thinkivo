@@ -8,3 +8,9 @@ fun App() {
     Text("Hello from Thinkivo!")
     // TODO: Add more UI components
 }
+
+// Helper function for testing bot analysis
+fun formatTest() {
+    val message = "Hello World"
+    println(message)
+}
