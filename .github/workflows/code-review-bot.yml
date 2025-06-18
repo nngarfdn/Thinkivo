@@ -49,7 +49,7 @@ jobs:
           # Get list of changed Kotlin files
           if git diff --name-only origin/main...HEAD | grep -E '\.kt$' > changed-files.txt; then
             # Count changed files
-            CHANGED_COUNT=$(wc -l < changed-files.txt)
+            CHANGED_COUNT=$(wc -l < changed-files.txt | tr -d ' ')
             echo "changed_count=${CHANGED_COUNT}" >> $GITHUB_OUTPUT
             echo "Changed Kotlin files:"
             cat changed-files.txt
@@ -60,7 +60,7 @@ jobs:
           fi
 
       - name: Run detailed ktlint analysis
-        if: steps.analyze.outputs.changed_count > 0
+        if: steps.analyze.outputs.changed_count != '0' && steps.analyze.outputs.changed_count != ''
         run: |
           echo "Running detailed ktlint analysis on changed files..."
           
@@ -122,10 +122,10 @@ jobs:
           echo "" >> review-summary.md
           
           # Count different types of files
-          TOTAL_FILES=$(git diff --name-only origin/main...HEAD | wc -l)
-          KOTLIN_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.kt$' | wc -l || echo "0")
-          GRADLE_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.gradle|\.gradle\.kts$' | wc -l || echo "0")
-          YAML_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.yml|\.yaml$' | wc -l || echo "0")
+          TOTAL_FILES=$(git diff --name-only origin/main...HEAD | wc -l | tr -d ' ')
+          KOTLIN_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.kt$' | wc -l | tr -d ' ' || echo "0")
+          GRADLE_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.gradle|\.gradle\.kts$' | wc -l | tr -d ' ' || echo "0")
+          YAML_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.yml|\.yaml$' | wc -l | tr -d ' ' || echo "0")
           
           echo "- **Total files changed:** $TOTAL_FILES" >> review-summary.md
           echo "- **Kotlin files:** $KOTLIN_FILES" >> review-summary.md
