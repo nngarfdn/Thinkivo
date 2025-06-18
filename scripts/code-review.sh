@@ -46,9 +46,14 @@ echo -e "\n${BLUE}🔍 Running ktlint analysis...${NC}"
 # Analyze results for changed files
 TOTAL_ISSUES=0
 echo -e "\n${BLUE}📊 Analysis Results:${NC}"
-echo "$CHANGED_FILES" | while read file; do
+while read -r file; do
     if [ -n "$file" ]; then
-        ISSUES=$(grep -c "$file:" ktlint-output.tmp 2>/dev/null || echo "0")
+        # Look for issues in this specific file (match the file pattern from ktlint output)
+        ISSUES=$(grep -F -c "$(basename "$file"):" ktlint-output.tmp 2>/dev/null || echo "0")
+        # Ensure ISSUES is a valid number
+        if ! [[ "$ISSUES" =~ ^[0-9]+$ ]]; then
+            ISSUES=0
+        fi
         if [ "$ISSUES" -gt 0 ]; then
             echo -e "  ${RED}❌ $file: $ISSUES issues${NC}"
             TOTAL_ISSUES=$((TOTAL_ISSUES + ISSUES))
@@ -63,7 +68,7 @@ if grep -q "\.kt:" ktlint-output.tmp; then
     echo -e "\n${YELLOW}⚠️  Detailed Issues:${NC}"
     echo "$CHANGED_FILES" | while read file; do
         if [ -n "$file" ]; then
-            FILE_ISSUES=$(grep "$file:" ktlint-output.tmp || true)
+            FILE_ISSUES=$(grep "$(basename "$file"):" ktlint-output.tmp 2>/dev/null || true)
             if [ -n "$FILE_ISSUES" ]; then
                 echo -e "\n${YELLOW}📄 $file:${NC}"
                 echo "$FILE_ISSUES" | sed 's/^/  /'

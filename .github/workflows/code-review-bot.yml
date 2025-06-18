@@ -47,17 +47,20 @@ jobs:
         id: analyze
         run: |
           # Get list of changed Kotlin files
-          git diff --name-only origin/main...HEAD | grep -E '\.kt$' > changed-files.txt || echo "No Kotlin files changed"
-          
-          # Count changed files
-          CHANGED_COUNT=$(cat changed-files.txt | wc -l)
-          echo "changed_count=$CHANGED_COUNT" >> $GITHUB_OUTPUT
-          
-          echo "Changed Kotlin files:"
-          cat changed-files.txt
+          if git diff --name-only origin/main...HEAD | grep -E '\.kt$' > changed-files.txt; then
+            # Count changed files
+            CHANGED_COUNT=$(wc -l < changed-files.txt | tr -d ' ')
+            echo "changed_count=${CHANGED_COUNT}" >> $GITHUB_OUTPUT
+            echo "Changed Kotlin files:"
+            cat changed-files.txt
+          else
+            echo "No Kotlin files changed" > changed-files.txt
+            echo "changed_count=0" >> $GITHUB_OUTPUT
+            echo "No Kotlin files changed in this PR"
+          fi
 
       - name: Run detailed ktlint analysis
-        if: steps.analyze.outputs.changed_count > 0
+        if: steps.analyze.outputs.changed_count != '0' && steps.analyze.outputs.changed_count != ''
         run: |
           echo "Running detailed ktlint analysis on changed files..."
           
@@ -75,10 +78,23 @@ jobs:
             # Check each changed file for issues
             TOTAL_ISSUES=0
             while IFS= read -r file; do
-              if [ -n "$file" ]; then
-                ISSUES=$(grep -c "$file:" detailed-ktlint-report.txt || echo "0")
-                TOTAL_ISSUES=$((TOTAL_ISSUES + ISSUES))
-                if [ "$ISSUES" -gt 0 ]; then
+              if [ -n "$file" ] && [ "$file" != "No Kotlin files changed" ]; then
+                # Use a more robust approach to count issues
+                FILE_BASENAME=$(basename "$file")
+                ISSUES_RAW=$(grep -c "$FILE_BASENAME:" detailed-ktlint-report.txt 2>/dev/null || echo "0")
+                ISSUES=$(echo "$ISSUES_RAW" | tr -d ' ' | tr -d '\t')
+                
+                # Validate that ISSUES is a number
+                case "$ISSUES" in
+                  ''|*[!0-9]*) ISSUES=0 ;;
+                  *) ;;
+                esac
+                
+                # Add to total (use expr to avoid arithmetic expansion issues)
+                TOTAL_ISSUES=$(expr "$TOTAL_ISSUES" + "$ISSUES" 2>/dev/null || echo "$TOTAL_ISSUES")
+                
+                # Report issues for this file
+                if [ "$ISSUES" != "0" ] && [ "$ISSUES" -gt 0 ] 2>/dev/null; then
                   echo "- **$file:** $ISSUES issues" >> review-summary.md
                 fi
               fi
@@ -87,13 +103,15 @@ jobs:
             echo "- **Total issues:** $TOTAL_ISSUES" >> review-summary.md
             echo "" >> review-summary.md
             
-            if [ "$TOTAL_ISSUES" -gt 0 ]; then
+            # Check if we have any issues (using string comparison to avoid arithmetic issues)
+            if [ "$TOTAL_ISSUES" != "0" ] && [ "$TOTAL_ISSUES" -gt 0 ] 2>/dev/null; then
               echo "## 🔍 Detailed Issues" >> review-summary.md
               echo "" >> review-summary.md
               
               while IFS= read -r file; do
-                if [ -n "$file" ]; then
-                  FILE_ISSUES=$(grep "$file:" detailed-ktlint-report.txt || true)
+                if [ -n "$file" ] && [ "$file" != "No Kotlin files changed" ]; then
+                  FILE_BASENAME=$(basename "$file")
+                  FILE_ISSUES=$(grep "$FILE_BASENAME:" detailed-ktlint-report.txt 2>/dev/null || true)
                   if [ -n "$FILE_ISSUES" ]; then
                     echo "### 📄 $file" >> review-summary.md
                     echo "\`\`\`" >> review-summary.md
@@ -119,10 +137,10 @@ jobs:
           echo "" >> review-summary.md
           
           # Count different types of files
-          TOTAL_FILES=$(git diff --name-only origin/main...HEAD | wc -l)
-          KOTLIN_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.kt$' | wc -l || echo "0")
-          GRADLE_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.gradle|\.gradle\.kts$' | wc -l || echo "0")
-          YAML_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.yml|\.yaml$' | wc -l || echo "0")
+          TOTAL_FILES=$(git diff --name-only origin/main...HEAD | wc -l | tr -d ' ')
+          KOTLIN_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.kt$' | wc -l | tr -d ' ' || echo "0")
+          GRADLE_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.gradle|\.gradle\.kts$' | wc -l | tr -d ' ' || echo "0")
+          YAML_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.yml|\.yaml$' | wc -l | tr -d ' ' || echo "0")
           
           echo "- **Total files changed:** $TOTAL_FILES" >> review-summary.md
           echo "- **Kotlin files:** $KOTLIN_FILES" >> review-summary.md
