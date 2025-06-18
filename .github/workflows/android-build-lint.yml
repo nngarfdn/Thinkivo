@@ -33,7 +33,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build APK
-        run: ./gradlew :composeApp:assembleDebug
+        run: ./gradlew :composeApp:assembleDebug --stacktrace --info
 
       - name: Run ktlint
         run: ./gradlew ktlintCheck
