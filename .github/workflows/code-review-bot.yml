@@ -46,118 +46,171 @@ jobs:
       - name: Analyze changed files
         id: analyze
         run: |
-          # Get list of changed Kotlin files
-          if git diff --name-only origin/main...HEAD | grep -E '\.kt$' > changed-files.txt; then
+          # Get the base branch for comparison
+          BASE_BRANCH="${{ github.event.pull_request.base.ref || 'main' }}"
+          echo "Comparing against base branch: $BASE_BRANCH"
+          
+          # Fetch the base branch
+          git fetch origin $BASE_BRANCH:$BASE_BRANCH || git fetch origin $BASE_BRANCH
+          
+          # Get list of changed Kotlin files in this PR only
+          if git diff --name-only origin/$BASE_BRANCH...HEAD | grep -E '\.kt$' > changed-files.txt; then
             # Count changed files
             CHANGED_COUNT=$(wc -l < changed-files.txt | tr -d ' ')
             echo "changed_count=${CHANGED_COUNT}" >> $GITHUB_OUTPUT
-            echo "Changed Kotlin files:"
-            cat changed-files.txt
+            echo "📁 Changed Kotlin files in this PR:"
+            cat changed-files.txt | while read file; do
+              if [ -f "$file" ]; then
+                echo "  ✅ $file"
+              else
+                echo "  ❌ $file (deleted)"
+              fi
+            done
           else
-            echo "No Kotlin files changed" > changed-files.txt
+            echo "No Kotlin files changed in this PR" > changed-files.txt
             echo "changed_count=0" >> $GITHUB_OUTPUT
-            echo "No Kotlin files changed in this PR"
+            echo "🎯 No Kotlin files changed in this PR"
           fi
+          
+          # Also save list of all changed files for context
+          git diff --name-only origin/$BASE_BRANCH...HEAD > all-changed-files.txt || echo "No files changed" > all-changed-files.txt
 
-      - name: Run detailed ktlint analysis
+      - name: Run ktlint analysis on changed files only
         if: steps.analyze.outputs.changed_count != '0' && steps.analyze.outputs.changed_count != ''
         run: |
-          echo "Running detailed ktlint analysis on changed files..."
+          echo "Running ktlint analysis on changed files only..."
           
-          # Run ktlint on all files but capture detailed output
-          ./gradlew ktlintCheck --continue > detailed-ktlint-report.txt 2>&1 || true
-          
-          # Extract issues from changed files only
-          echo "# Ktlint Analysis for Changed Files" > review-summary.md
+          # Initialize the report
+          echo "# 🔍 Ktlint Analysis for Changed Files" > review-summary.md
+          echo "" >> review-summary.md
+          echo "## 📊 Analysis Summary" >> review-summary.md
+          echo "- **Files analyzed:** ${{ steps.analyze.outputs.changed_count }}" >> review-summary.md
           echo "" >> review-summary.md
           
-          if [ -f changed-files.txt ] && [ -s changed-files.txt ]; then
-            echo "## 📊 Analysis Summary" >> review-summary.md
-            echo "- **Files analyzed:** ${{ steps.analyze.outputs.changed_count }}" >> review-summary.md
+          # Initialize counters
+          TOTAL_ISSUES=0
+          FILES_WITH_ISSUES=0
+          
+          # Create temporary file for detailed issues
+          > detailed-issues.txt
+          
+          # Analyze each changed file individually using ktlint directly
+          while IFS= read -r file; do
+            if [ -n "$file" ] && [ "$file" != "No Kotlin files changed" ] && [ -f "$file" ]; then
+              echo "🔍 Analyzing: $file"
+              
+              # Use ktlint CLI directly on the specific file for more precise output
+              if command -v ktlint >/dev/null 2>&1; then
+                # If ktlint CLI is available, use it directly
+                FILE_OUTPUT=$(ktlint --format --reporter=plain "$file" 2>&1 || true)
+              else
+                # Fallback to gradle but filter output more precisely
+                FILE_OUTPUT=$(./gradlew ktlintCheck 2>&1 | grep -E "($file|$file:)" || true)
+              fi
+              
+              if [ -n "$FILE_OUTPUT" ] && echo "$FILE_OUTPUT" | grep -q "$file"; then
+                # Count issues for this file
+                FILE_ISSUES=$(echo "$FILE_OUTPUT" | grep -c "$file" || echo "0")
+                if [ "$FILE_ISSUES" -gt 0 ]; then
+                  TOTAL_ISSUES=$((TOTAL_ISSUES + FILE_ISSUES))
+                  FILES_WITH_ISSUES=$((FILES_WITH_ISSUES + 1))
+                  
+                  # Store detailed output
+                  echo "### 📄 \`$file\`" >> detailed-issues.txt
+                  echo "" >> detailed-issues.txt
+                  echo "\`\`\`" >> detailed-issues.txt
+                  echo "$FILE_OUTPUT" >> detailed-issues.txt
+                  echo "\`\`\`" >> detailed-issues.txt
+                  echo "" >> detailed-issues.txt
+                fi
+              else
+                echo "✅ $file - No issues found"
+              fi
+            fi
+          done < changed-files.txt
+          
+          # Update summary with results
+          echo "- **Files with issues:** $FILES_WITH_ISSUES" >> review-summary.md
+          echo "- **Total issues found:** $TOTAL_ISSUES" >> review-summary.md
+          echo "- **Clean files:** $(($(cat changed-files.txt | wc -l) - FILES_WITH_ISSUES))" >> review-summary.md
+          echo "" >> review-summary.md
+          
+          # Add detailed issues if any exist
+          if [ "$TOTAL_ISSUES" -gt 0 ]; then
+            echo "## 🚨 Issues Found" >> review-summary.md
+            echo "" >> review-summary.md
+            echo "> **Note:** Only showing issues in files changed by this PR" >> review-summary.md
+            echo "" >> review-summary.md
+            cat detailed-issues.txt >> review-summary.md
             
-            # Check each changed file for issues
-            TOTAL_ISSUES=0
+            echo "### 🔧 Quick Fix" >> review-summary.md
+            echo "" >> review-summary.md
+            echo "Run this command to auto-fix most formatting issues:" >> review-summary.md
+            echo "\`\`\`bash" >> review-summary.md
+            echo "./gradlew ktlintFormat" >> review-summary.md
+            echo "\`\`\`" >> review-summary.md
+            echo "" >> review-summary.md
+          else
+            echo "## ✅ Perfect! No Issues Found" >> review-summary.md
+            echo "" >> review-summary.md
+            echo "🎉 All changed files follow Kotlin coding standards perfectly!" >> review-summary.md
+            echo "" >> review-summary.md
+            echo "### Changed Files:" >> review-summary.md
             while IFS= read -r file; do
               if [ -n "$file" ] && [ "$file" != "No Kotlin files changed" ]; then
-                # Use a more robust approach to count issues
-                FILE_BASENAME=$(basename "$file")
-                ISSUES_RAW=$(grep -c "$FILE_BASENAME:" detailed-ktlint-report.txt 2>/dev/null || echo "0")
-                ISSUES=$(echo "$ISSUES_RAW" | tr -d ' ' | tr -d '\t')
-                
-                # Validate that ISSUES is a number
-                case "$ISSUES" in
-                  ''|*[!0-9]*) ISSUES=0 ;;
-                  *) ;;
-                esac
-                
-                # Add to total (use expr to avoid arithmetic expansion issues)
-                TOTAL_ISSUES=$(expr "$TOTAL_ISSUES" + "$ISSUES" 2>/dev/null || echo "$TOTAL_ISSUES")
-                
-                # Report issues for this file
-                if [ "$ISSUES" != "0" ] && [ "$ISSUES" -gt 0 ] 2>/dev/null; then
-                  echo "- **$file:** $ISSUES issues" >> review-summary.md
-                fi
+                echo "- ✅ \`$file\`" >> review-summary.md
               fi
             done < changed-files.txt
-            
-            echo "- **Total issues:** $TOTAL_ISSUES" >> review-summary.md
             echo "" >> review-summary.md
-            
-            # Check if we have any issues (using string comparison to avoid arithmetic issues)
-            if [ "$TOTAL_ISSUES" != "0" ] && [ "$TOTAL_ISSUES" -gt 0 ] 2>/dev/null; then
-              echo "## 🔍 Detailed Issues" >> review-summary.md
-              echo "" >> review-summary.md
-              
-              while IFS= read -r file; do
-                if [ -n "$file" ] && [ "$file" != "No Kotlin files changed" ]; then
-                  FILE_BASENAME=$(basename "$file")
-                  FILE_ISSUES=$(grep "$FILE_BASENAME:" detailed-ktlint-report.txt 2>/dev/null || true)
-                  if [ -n "$FILE_ISSUES" ]; then
-                    echo "### 📄 $file" >> review-summary.md
-                    echo "\`\`\`" >> review-summary.md
-                    echo "$FILE_ISSUES" >> review-summary.md
-                    echo "\`\`\`" >> review-summary.md
-                    echo "" >> review-summary.md
-                  fi
-                fi
-              done < changed-files.txt
-            else
-              echo "## ✅ Great Work!" >> review-summary.md
-              echo "All changed files follow Kotlin coding standards perfectly!" >> review-summary.md
-            fi
-          else
-            echo "## ℹ️ No Kotlin files changed" >> review-summary.md
-            echo "This PR doesn't contain any Kotlin file changes to analyze." >> review-summary.md
           fi
 
       - name: Generate code quality insights
         run: |
           echo "" >> review-summary.md
-          echo "## 📈 Code Quality Insights" >> review-summary.md
+          echo "## 📈 PR Change Summary" >> review-summary.md
           echo "" >> review-summary.md
           
-          # Count different types of files
-          TOTAL_FILES=$(git diff --name-only origin/main...HEAD | wc -l | tr -d ' ')
-          KOTLIN_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.kt$' | wc -l | tr -d ' ' || echo "0")
-          GRADLE_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.gradle|\.gradle\.kts$' | wc -l | tr -d ' ' || echo "0")
-          YAML_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.yml|\.yaml$' | wc -l | tr -d ' ' || echo "0")
+          # Count different types of files changed in this PR
+          BASE_BRANCH="${{ github.event.pull_request.base.ref || 'main' }}"
+          TOTAL_FILES=$(git diff --name-only origin/$BASE_BRANCH...HEAD | wc -l | tr -d ' ')
+          KOTLIN_FILES=$(git diff --name-only origin/$BASE_BRANCH...HEAD | grep -E '\.kt$' | wc -l | tr -d ' ' || echo "0")
+          GRADLE_FILES=$(git diff --name-only origin/$BASE_BRANCH...HEAD | grep -E '\.gradle|\.gradle\.kts$' | wc -l | tr -d ' ' || echo "0")
+          YAML_FILES=$(git diff --name-only origin/$BASE_BRANCH...HEAD | grep -E '\.yml|\.yaml$' | wc -l | tr -d ' ' || echo "0")
+          XML_FILES=$(git diff --name-only origin/$BASE_BRANCH...HEAD | grep -E '\.xml$' | wc -l | tr -d ' ' || echo "0")
           
-          echo "- **Total files changed:** $TOTAL_FILES" >> review-summary.md
+          echo "- **Total files changed in PR:** $TOTAL_FILES" >> review-summary.md
           echo "- **Kotlin files:** $KOTLIN_FILES" >> review-summary.md
           echo "- **Gradle files:** $GRADLE_FILES" >> review-summary.md
           echo "- **YAML files:** $YAML_FILES" >> review-summary.md
+          echo "- **XML files:** $XML_FILES" >> review-summary.md
           echo "" >> review-summary.md
           
-          # Add recommendations
-          echo "## 💡 Recommendations" >> review-summary.md
+          # Add lines of code changed
+          ADDITIONS=$(git diff --shortstat origin/$BASE_BRANCH...HEAD | grep -o '[0-9]* insertion' | grep -o '[0-9]*' || echo "0")
+          DELETIONS=$(git diff --shortstat origin/$BASE_BRANCH...HEAD | grep -o '[0-9]* deletion' | grep -o '[0-9]*' || echo "0")
+          
+          echo "### 📊 Code Changes" >> review-summary.md
+          echo "- **Lines added:** +$ADDITIONS" >> review-summary.md
+          echo "- **Lines removed:** -$DELETIONS" >> review-summary.md
           echo "" >> review-summary.md
-          echo "1. **Before committing:** Run \`./gradlew ktlintFormat\` to auto-fix formatting issues" >> review-summary.md
-          echo "2. **IDE Setup:** Configure your IDE to use ktlint formatting rules" >> review-summary.md
-          echo "3. **Pre-commit Hook:** Consider adding ktlint as a pre-commit hook" >> review-summary.md
-          echo "4. **Code Review:** Focus on logic and architecture, formatting is handled automatically" >> review-summary.md
+          
+          # Add actionable recommendations
+          echo "## 💡 Developer Guidelines" >> review-summary.md
+          echo "" >> review-summary.md
+          echo "### 🔧 Before Committing" >> review-summary.md
+          echo "1. **Format code:** \`./gradlew ktlintFormat\` - Auto-fixes most issues" >> review-summary.md
+          echo "2. **Check locally:** \`./gradlew ktlintCheck\` - Validates formatting" >> review-summary.md
+          echo "3. **Run tests:** \`./gradlew test\` - Ensures functionality" >> review-summary.md
+          echo "" >> review-summary.md
+          
+          echo "### 🎯 This Review Covers" >> review-summary.md
+          echo "- ✅ **Only files changed in this PR**" >> review-summary.md
+          echo "- ✅ **Kotlin code style & formatting**" >> review-summary.md
+          echo "- ✅ **Automated suggestions for fixes**" >> review-summary.md
+          echo "- ❌ **Does not review**: Logic, architecture, or business requirements" >> review-summary.md
           echo "" >> review-summary.md
           echo "---" >> review-summary.md
-          echo "*🤖 This detailed analysis was generated by the Code Review Bot*" >> review-summary.md
+          echo "*🤖 Automated review by Code Review Bot - Only analyzing PR changes*" >> review-summary.md
 
       - name: Post detailed review comment
         if: github.event_name == 'pull_request'
@@ -170,14 +223,19 @@ jobs:
             if (fs.existsSync('review-summary.md')) {
               comment = fs.readFileSync('review-summary.md', 'utf8');
             } else {
-              comment = `# 🤖 Code Review Bot
+              comment = `# 🤖 Code Review Bot - PR Analysis
               
               ## ✅ Analysis Complete
               
               No Kotlin files were changed in this PR, so no ktlint analysis was needed.
               
+              ### What This Bot Reviews
+              - ✅ **Only files changed in this PR**
+              - ✅ **Kotlin code formatting & style**
+              - ❌ **Does not review the entire project**
+              
               ---
-              *🤖 This analysis was generated by the Code Review Bot*`;
+              *🤖 Automated review focuses only on your PR changes*`;
             }
             
             // Find existing detailed review comment
@@ -188,8 +246,8 @@ jobs:
             });
             
             const existingComment = comments.data.find(
-              comment => comment.body.includes('This detailed analysis was generated by the Code Review Bot') ||
-                        comment.body.includes('This analysis was generated by the Code Review Bot')
+              comment => comment.body.includes('🤖 Code Review Bot') ||
+                        comment.body.includes('Automated review by Code Review Bot')
             );
             
             if (existingComment) {
@@ -200,7 +258,7 @@ jobs:
                 comment_id: existingComment.id,
                 body: comment
               });
-              console.log('Updated existing detailed review comment');
+              console.log('✅ Updated existing PR review comment');
             } else {
               // Create new comment
               await github.rest.issues.createComment({
@@ -209,16 +267,17 @@ jobs:
                 issue_number: context.issue.number,
                 body: comment
               });
-              console.log('Created new detailed review comment');
+              console.log('✅ Created new PR review comment');
             }
 
-      - name: Upload detailed analysis artifacts
+      - name: Upload PR analysis artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: detailed-code-review
+          name: pr-code-review-analysis
           path: |
-            detailed-ktlint-report.txt
             review-summary.md
             changed-files.txt
+            all-changed-files.txt
+            detailed-issues.txt
           retention-days: 30
