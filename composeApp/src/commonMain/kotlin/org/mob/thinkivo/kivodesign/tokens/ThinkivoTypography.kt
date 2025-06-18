@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.sp
  */
 @Immutable
 object ThinkivoTypography {
-    
+
     // Font Weights based on design system
     object Weights {
         val Heavy = FontWeight.W900
@@ -21,7 +21,7 @@ object ThinkivoTypography {
         val Regular = FontWeight.W400
         val Thin = FontWeight.W100
     }
-    
+
     // Heading Styles
     val H1 = TextStyle(
         fontFamily = FontFamily.Default, // Will be SF Pro Display on iOS, Roboto on Android
@@ -30,7 +30,7 @@ object ThinkivoTypography {
         lineHeight = 68.sp,
         letterSpacing = (-0.5).sp
     )
-    
+
     val H2 = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 48.sp,
@@ -38,7 +38,7 @@ object ThinkivoTypography {
         lineHeight = 56.sp,
         letterSpacing = (-0.4).sp
     )
-    
+
     val H3 = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 40.sp,
@@ -46,7 +46,7 @@ object ThinkivoTypography {
         lineHeight = 48.sp,
         letterSpacing = (-0.3).sp
     )
-    
+
     val H4 = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 32.sp,
@@ -54,7 +54,7 @@ object ThinkivoTypography {
         lineHeight = 40.sp,
         letterSpacing = (-0.2).sp
     )
-    
+
     val H5 = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 24.sp,
@@ -62,7 +62,7 @@ object ThinkivoTypography {
         lineHeight = 32.sp,
         letterSpacing = (-0.1).sp
     )
-    
+
     val H6 = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 20.sp,
@@ -70,7 +70,7 @@ object ThinkivoTypography {
         lineHeight = 28.sp,
         letterSpacing = 0.sp
     )
-    
+
     // Body Text Styles
     val BodyLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -79,7 +79,7 @@ object ThinkivoTypography {
         lineHeight = 26.sp,
         letterSpacing = 0.1.sp
     )
-    
+
     val BodyMedium = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 16.sp,
@@ -87,7 +87,7 @@ object ThinkivoTypography {
         lineHeight = 24.sp,
         letterSpacing = 0.1.sp
     )
-    
+
     val BodySmall = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 14.sp,
@@ -95,7 +95,7 @@ object ThinkivoTypography {
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
     )
-    
+
     // Supporting Text Styles
     val Caption = TextStyle(
         fontFamily = FontFamily.Default,
@@ -104,7 +104,7 @@ object ThinkivoTypography {
         lineHeight = 16.sp,
         letterSpacing = 0.2.sp
     )
-    
+
     val Small = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 10.sp,
@@ -112,7 +112,7 @@ object ThinkivoTypography {
         lineHeight = 14.sp,
         letterSpacing = 0.2.sp
     )
-    
+
     val Tiny = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 8.sp,
@@ -120,7 +120,7 @@ object ThinkivoTypography {
         lineHeight = 12.sp,
         letterSpacing = 0.3.sp
     )
-    
+
     // Label Styles (for buttons, form labels, etc.)
     val LabelLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -129,7 +129,7 @@ object ThinkivoTypography {
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp
     )
-    
+
     val LabelMedium = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 14.sp,
@@ -137,7 +137,7 @@ object ThinkivoTypography {
         lineHeight = 18.sp,
         letterSpacing = 0.1.sp
     )
-    
+
     val LabelSmall = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 12.sp,
@@ -145,7 +145,7 @@ object ThinkivoTypography {
         lineHeight = 16.sp,
         letterSpacing = 0.2.sp
     )
-    
+
     // Display Styles (for hero text, marketing content)
     val DisplayLarge = TextStyle(
         fontFamily = FontFamily.Default,
@@ -154,7 +154,7 @@ object ThinkivoTypography {
         lineHeight = 104.sp,
         letterSpacing = (-1.5).sp
     )
-    
+
     val DisplayMedium = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 72.sp,
@@ -162,7 +162,7 @@ object ThinkivoTypography {
         lineHeight = 80.sp,
         letterSpacing = (-1.0).sp
     )
-    
+
     val DisplaySmall = TextStyle(
         fontFamily = FontFamily.Default,
         fontSize = 64.sp,

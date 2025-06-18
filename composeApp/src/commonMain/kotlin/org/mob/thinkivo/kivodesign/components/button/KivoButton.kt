@@ -23,7 +23,7 @@ import org.mob.thinkivo.kivodesign.tokens.ThinkivoColors
 /**
  * KivoButton provides consistent button styling across platforms.
  * Supports filled and outlined variants in multiple sizes.
- * 
+ *
  * @param text The button text to display
  * @param onClick Callback when button is pressed
  * @param modifier Modifier to be applied to the button
@@ -32,7 +32,7 @@ import org.mob.thinkivo.kivodesign.tokens.ThinkivoColors
  * @param size Size variant of the button
  * @param colors Custom colors for the button
  * @param interactionSource MutableInteractionSource for handling interactions
- * 
+ *
  * @sample KivoButtonSample
  */
 @Composable
@@ -53,6 +53,7 @@ fun KivoButton(
             disabledContainerColor = colors.disabledContainerColor,
             disabledContentColor = colors.disabledContentColor
         )
+
         KivoButtonStyle.Outlined -> ButtonDefaults.outlinedButtonColors(
             containerColor = Color.Transparent,
             contentColor = colors.containerColor,
@@ -93,6 +94,7 @@ fun KivoButton(
                 )
             }
         }
+
         KivoButtonStyle.Outlined -> {
             OutlinedButton(
                 onClick = onClick,
@@ -137,28 +139,28 @@ sealed class KivoButtonSize(
         textStyle = TextStyle(),
         shape = RoundedCornerShape(8.dp)
     )
-    
+
     data object Large : KivoButtonSize(
         height = 48.dp,
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
         textStyle = TextStyle(),
         shape = RoundedCornerShape(8.dp)
     )
-    
+
     data object Medium : KivoButtonSize(
         height = 40.dp,
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
         textStyle = TextStyle(),
         shape = RoundedCornerShape(6.dp)
     )
-    
+
     data object Small : KivoButtonSize(
         height = 32.dp,
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
         textStyle = TextStyle(),
         shape = RoundedCornerShape(6.dp)
     )
-    
+
     // Icon-only button variants
     data object IconLarge : KivoButtonSize(
         height = 48.dp,
@@ -167,7 +169,7 @@ sealed class KivoButtonSize(
         textStyle = TextStyle(),
         shape = RoundedCornerShape(8.dp)
     )
-    
+
     data object IconMedium : KivoButtonSize(
         height = 40.dp,
         width = 40.dp,
@@ -175,7 +177,7 @@ sealed class KivoButtonSize(
         textStyle = TextStyle(),
         shape = RoundedCornerShape(6.dp)
     )
-    
+
     data object IconSmall : KivoButtonSize(
         height = 32.dp,
         width = 32.dp,
@@ -200,7 +202,7 @@ data class KivoButtonColors(
  * Default values for KivoButton
  */
 object KivoButtonDefaults {
-    
+
     /**
      * Creates default colors for primary button
      */
@@ -216,7 +218,7 @@ object KivoButtonDefaults {
         disabledContainerColor = disabledContainerColor,
         disabledContentColor = disabledContentColor
     )
-    
+
     /**
      * Creates colors for danger/destructive actions
      */
@@ -227,7 +229,7 @@ object KivoButtonDefaults {
         disabledContainerColor = ThinkivoColors.Gray300,
         disabledContentColor = ThinkivoColors.Gray500
     )
-    
+
     /**
      * Creates colors for success actions
      */
@@ -238,7 +240,7 @@ object KivoButtonDefaults {
         disabledContainerColor = ThinkivoColors.Gray300,
         disabledContentColor = ThinkivoColors.Gray500
     )
-    
+
     /**
      * Creates colors for warning actions
      */
@@ -249,7 +251,7 @@ object KivoButtonDefaults {
         disabledContainerColor = ThinkivoColors.Gray300,
         disabledContentColor = ThinkivoColors.Gray500
     )
-    
+
     /**
      * Creates colors for secondary/neutral actions
      */

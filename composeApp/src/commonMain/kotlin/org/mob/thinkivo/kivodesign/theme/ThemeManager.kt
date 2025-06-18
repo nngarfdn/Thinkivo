@@ -11,14 +11,14 @@ import androidx.compose.runtime.setValue
 object ThemeManager {
     var isDarkTheme by mutableStateOf(false)
         private set
-    
+
     /**
      * Toggle between light and dark theme
      */
     fun toggleTheme() {
         isDarkTheme = !isDarkTheme
     }
-    
+
     /**
      * Set specific theme
      * @param darkTheme true for dark theme, false for light theme
@@ -26,7 +26,7 @@ object ThemeManager {
     fun setTheme(darkTheme: Boolean) {
         isDarkTheme = darkTheme
     }
-    
+
     /**
      * Reset to system theme preference
      */

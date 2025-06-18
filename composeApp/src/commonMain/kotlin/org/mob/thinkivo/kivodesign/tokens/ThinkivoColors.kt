@@ -9,35 +9,35 @@ import androidx.compose.ui.graphics.Color
  */
 @Immutable
 object ThinkivoColors {
-    
+
     // Brand Colors - Primary Scale
     val Primary = Color(0xFF1E88E5)  // Base Primary
     val PrimaryDark = Color(0xFF1565C0)
     val PrimaryLight = Color(0xFF64B5F6)
     val PrimaryLighter = Color(0xFF90CAF9)
     val PrimaryLightest = Color(0xFFBBDEFB)
-    
+
     // Brand Colors - Danger/Error Scale
     val Danger = Color(0xFFD32F2F)  // Base Danger
     val DangerDark = Color(0xFFC62828)
     val DangerLight = Color(0xFFEF5350)
     val DangerLighter = Color(0xFFE57373)
     val DangerLightest = Color(0xFFFFCDD2)
-    
+
     // Brand Colors - Success Scale
     val Success = Color(0xFF388E3C)  // Base Success
     val SuccessDark = Color(0xFF2E7D32)
     val SuccessLight = Color(0xFF66BB6A)
     val SuccessLighter = Color(0xFF81C784)
     val SuccessLightest = Color(0xFFC8E6C9)
-    
+
     // Brand Colors - Warning Scale
     val Warning = Color(0xFFFF9800)  // Base Warning
     val WarningDark = Color(0xFFEF6C00)
     val WarningLight = Color(0xFFFFB74D)
     val WarningLighter = Color(0xFFFFCC80)
     val WarningLightest = Color(0xFFFFE0B2)
-    
+
     // Neutral Colors - Black to White Scale
     val Black = Color(0xFF000000)
     val Gray900 = Color(0xFF212121)
@@ -51,7 +51,7 @@ object ThinkivoColors {
     val Gray100 = Color(0xFFF5F5F5)
     val Gray50 = Color(0xFFFAFAFA)
     val White = Color(0xFFFFFFFF)
-    
+
     // Layout Colors
     object Layout {
         val Coral = Color(0xFFFF7043)
@@ -80,7 +80,7 @@ object ThinkivoColors {
         val BrownDark = Color(0xFF5D4037)
         val LimeGreen = Color(0xFF8BC34A)
     }
-    
+
     // Payment Colors
     object Payment {
         val Orange = Color(0xFFFF5722)
@@ -88,7 +88,7 @@ object ThinkivoColors {
         val Purple = Color(0xFF673AB7)
         val Navy = Color(0xFF283593)
     }
-    
+
     // System Warning Extended
     object SystemWarning {
         val Warning1 = Color(0xFFBF6000)
@@ -98,7 +98,7 @@ object ThinkivoColors {
         val Warning5 = Color(0xFFFFCC80)
         val Warning6 = Color(0xFFFFE0B2)
     }
-    
+
     // Gradients
     object Gradient {
         // Gradient Bottom (from design system)
@@ -107,7 +107,7 @@ object ThinkivoColors {
         val PinkGradient = listOf(Color(0xFFE91E63), Color(0xFFF8BBD9))
         val OrangeGradient = listOf(Color(0xFFFF9800), Color(0xFFFFCC80))
         val GreenGradient = listOf(Color(0xFF4CAF50), Color(0xFF81C784))
-        
+
         // Gradient Full (complex gradients)
         val GrayFull = listOf(Color(0xFF424242), Color(0xFF9E9E9E))
         val BlueFull = listOf(Color(0xFF1565C0), Color(0xFF90CAF9))
@@ -134,7 +134,7 @@ object ThinkivoColors {
         val Outline = Gray400
         val OutlineVariant = Gray300
     }
-    
+
     // Semantic Colors for Dark Theme
     object Dark {
         val Background = Gray900
@@ -150,7 +150,7 @@ object ThinkivoColors {
         val Outline = Gray600
         val OutlineVariant = Gray700
     }
-    
+
     // System State Colors
     object System {
         val Error = Danger

@@ -16,7 +16,7 @@ import org.mob.thinkivo.kivodesign.theme.KivoTheme
 
 /**
  * KivoThemeToggle provides a toggle switch for light/dark theme.
- * 
+ *
  * @param isDarkTheme Current theme state
  * @param onThemeChange Callback when theme is toggled
  * @param modifier Modifier to be applied to the toggle
@@ -40,20 +40,20 @@ fun KivoThemeToggle(
             contentDescription = "Light mode",
             tint = if (!isDarkTheme) KivoTheme.colors.primary else KivoTheme.colors.onSurfaceVariant
         )
-        
+
         // Theme toggle switch
         Switch(
             checked = isDarkTheme,
             onCheckedChange = onThemeChange
         )
-        
+
         // Dark mode icon
         Icon(
             imageVector = Icons.Default.DarkMode,
             contentDescription = "Dark mode",
             tint = if (isDarkTheme) KivoTheme.colors.primary else KivoTheme.colors.onSurfaceVariant
         )
-        
+
         // Optional label
         if (showLabel) {
             Text(

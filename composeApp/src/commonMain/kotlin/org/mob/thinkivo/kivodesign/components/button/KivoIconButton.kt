@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 /**
  * KivoIconButton provides consistent icon button styling across platforms.
  * Supports filled and outlined variants in multiple sizes.
- * 
+ *
  * @param icon The icon to display
  * @param contentDescription Accessibility description for the icon
  * @param onClick Callback when button is pressed
@@ -50,6 +50,7 @@ fun KivoIconButton(
             disabledContainerColor = colors.disabledContainerColor,
             disabledContentColor = colors.disabledContentColor
         )
+
         KivoButtonStyle.Outlined -> ButtonDefaults.outlinedButtonColors(
             containerColor = Color.Transparent,
             contentColor = colors.containerColor,
@@ -94,6 +95,7 @@ fun KivoIconButton(
                 )
             }
         }
+
         KivoButtonStyle.Outlined -> {
             OutlinedButton(
                 onClick = onClick,
@@ -125,7 +127,7 @@ fun KivoIconButton(
 /**
  * KivoTextIconButton combines text and icon in a single button.
  * Supports both leading and trailing icon positions.
- * 
+ *
  * @param text The button text to display
  * @param icon The icon to display
  * @param contentDescription Accessibility description for the icon
@@ -159,6 +161,7 @@ fun KivoTextIconButton(
             disabledContainerColor = colors.disabledContainerColor,
             disabledContentColor = colors.disabledContentColor
         )
+
         KivoButtonStyle.Outlined -> ButtonDefaults.outlinedButtonColors(
             containerColor = Color.Transparent,
             contentColor = colors.containerColor,
@@ -206,6 +209,7 @@ fun KivoTextIconButton(
                 )
             }
         }
+
         KivoButtonStyle.Outlined -> {
             OutlinedButton(
                 onClick = onClick,
@@ -255,6 +259,7 @@ private fun ButtonContent(
                     style = textStyle
                 )
             }
+
             KivoIconPosition.Trailing -> {
                 Text(
                     text = text,
