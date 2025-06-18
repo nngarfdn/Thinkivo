@@ -1,0 +1,206 @@
+name: Code Review Bot
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_run:
+    workflows: ["Android Build & Lint"]
+    types: [completed]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  checks: read
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Analyze changed files
+        id: analyze
+        run: |
+          # Get list of changed Kotlin files
+          git diff --name-only origin/main...HEAD | grep -E '\.kt$' > changed-files.txt || echo "No Kotlin files changed"
+          
+          # Count changed files
+          CHANGED_COUNT=$(cat changed-files.txt | wc -l)
+          echo "changed_count=$CHANGED_COUNT" >> $GITHUB_OUTPUT
+          
+          echo "Changed Kotlin files:"
+          cat changed-files.txt
+
+      - name: Run detailed ktlint analysis
+        if: steps.analyze.outputs.changed_count > 0
+        run: |
+          echo "Running detailed ktlint analysis on changed files..."
+          
+          # Run ktlint on all files but capture detailed output
+          ./gradlew ktlintCheck --continue > detailed-ktlint-report.txt 2>&1 || true
+          
+          # Extract issues from changed files only
+          echo "# Ktlint Analysis for Changed Files" > review-summary.md
+          echo "" >> review-summary.md
+          
+          if [ -f changed-files.txt ] && [ -s changed-files.txt ]; then
+            echo "## 📊 Analysis Summary" >> review-summary.md
+            echo "- **Files analyzed:** ${{ steps.analyze.outputs.changed_count }}" >> review-summary.md
+            
+            # Check each changed file for issues
+            TOTAL_ISSUES=0
+            while IFS= read -r file; do
+              if [ -n "$file" ]; then
+                ISSUES=$(grep -c "$file:" detailed-ktlint-report.txt || echo "0")
+                TOTAL_ISSUES=$((TOTAL_ISSUES + ISSUES))
+                if [ "$ISSUES" -gt 0 ]; then
+                  echo "- **$file:** $ISSUES issues" >> review-summary.md
+                fi
+              fi
+            done < changed-files.txt
+            
+            echo "- **Total issues:** $TOTAL_ISSUES" >> review-summary.md
+            echo "" >> review-summary.md
+            
+            if [ "$TOTAL_ISSUES" -gt 0 ]; then
+              echo "## 🔍 Detailed Issues" >> review-summary.md
+              echo "" >> review-summary.md
+              
+              while IFS= read -r file; do
+                if [ -n "$file" ]; then
+                  FILE_ISSUES=$(grep "$file:" detailed-ktlint-report.txt || true)
+                  if [ -n "$FILE_ISSUES" ]; then
+                    echo "### 📄 $file" >> review-summary.md
+                    echo "\`\`\`" >> review-summary.md
+                    echo "$FILE_ISSUES" >> review-summary.md
+                    echo "\`\`\`" >> review-summary.md
+                    echo "" >> review-summary.md
+                  fi
+                fi
+              done < changed-files.txt
+            else
+              echo "## ✅ Great Work!" >> review-summary.md
+              echo "All changed files follow Kotlin coding standards perfectly!" >> review-summary.md
+            fi
+          else
+            echo "## ℹ️ No Kotlin files changed" >> review-summary.md
+            echo "This PR doesn't contain any Kotlin file changes to analyze." >> review-summary.md
+          fi
+
+      - name: Generate code quality insights
+        run: |
+          echo "" >> review-summary.md
+          echo "## 📈 Code Quality Insights" >> review-summary.md
+          echo "" >> review-summary.md
+          
+          # Count different types of files
+          TOTAL_FILES=$(git diff --name-only origin/main...HEAD | wc -l)
+          KOTLIN_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.kt$' | wc -l || echo "0")
+          GRADLE_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.gradle|\.gradle\.kts$' | wc -l || echo "0")
+          YAML_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.yml|\.yaml$' | wc -l || echo "0")
+          
+          echo "- **Total files changed:** $TOTAL_FILES" >> review-summary.md
+          echo "- **Kotlin files:** $KOTLIN_FILES" >> review-summary.md
+          echo "- **Gradle files:** $GRADLE_FILES" >> review-summary.md
+          echo "- **YAML files:** $YAML_FILES" >> review-summary.md
+          echo "" >> review-summary.md
+          
+          # Add recommendations
+          echo "## 💡 Recommendations" >> review-summary.md
+          echo "" >> review-summary.md
+          echo "1. **Before committing:** Run \`./gradlew ktlintFormat\` to auto-fix formatting issues" >> review-summary.md
+          echo "2. **IDE Setup:** Configure your IDE to use ktlint formatting rules" >> review-summary.md
+          echo "3. **Pre-commit Hook:** Consider adding ktlint as a pre-commit hook" >> review-summary.md
+          echo "4. **Code Review:** Focus on logic and architecture, formatting is handled automatically" >> review-summary.md
+          echo "" >> review-summary.md
+          echo "---" >> review-summary.md
+          echo "*🤖 This detailed analysis was generated by the Code Review Bot*" >> review-summary.md
+
+      - name: Post detailed review comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            
+            let comment = '';
+            if (fs.existsSync('review-summary.md')) {
+              comment = fs.readFileSync('review-summary.md', 'utf8');
+            } else {
+              comment = `# 🤖 Code Review Bot
+              
+              ## ✅ Analysis Complete
+              
+              No Kotlin files were changed in this PR, so no ktlint analysis was needed.
+              
+              ---
+              *🤖 This analysis was generated by the Code Review Bot*`;
+            }
+            
+            // Find existing detailed review comment
+            const comments = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const existingComment = comments.data.find(
+              comment => comment.body.includes('This detailed analysis was generated by the Code Review Bot') ||
+                        comment.body.includes('This analysis was generated by the Code Review Bot')
+            );
+            
+            if (existingComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingComment.id,
+                body: comment
+              });
+              console.log('Updated existing detailed review comment');
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+              console.log('Created new detailed review comment');
+            }
+
+      - name: Upload detailed analysis artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: detailed-code-review
+          path: |
+            detailed-ktlint-report.txt
+            review-summary.md
+            changed-files.txt
+          retention-days: 30
