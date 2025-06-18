@@ -47,16 +47,14 @@ jobs:
           ./gradlew ktlintCheck --continue > ktlint-report.txt 2>&1 || true
           
           # Extract ktlint issues from the output
-          grep -E "\.kt:[0-9]+:[0-9]+" ktlint-report.txt > ktlint-issues.txt || echo "No ktlint issues found" > ktlint-issues.txt
-          
-          # Count issues
-          ISSUE_COUNT=$(grep -c "\.kt:[0-9]+:[0-9]+" ktlint-issues.txt || echo "0")
-          echo "issue_count=$ISSUE_COUNT" >> $GITHUB_OUTPUT
-          
-          # Create summary
-          if [ "$ISSUE_COUNT" -gt 0 ]; then
+          if grep -E "\.kt:[0-9]+:[0-9]+" ktlint-report.txt > ktlint-issues.txt; then
+            # Count issues
+            ISSUE_COUNT=$(wc -l < ktlint-issues.txt)
+            echo "issue_count=${ISSUE_COUNT}" >> $GITHUB_OUTPUT
             echo "status=issues_found" >> $GITHUB_OUTPUT
           else
+            echo "No ktlint issues found" > ktlint-issues.txt
+            echo "issue_count=0" >> $GITHUB_OUTPUT
             echo "status=clean" >> $GITHUB_OUTPUT
           fi
 

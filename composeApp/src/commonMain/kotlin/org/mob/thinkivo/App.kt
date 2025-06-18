@@ -5,5 +5,6 @@ import androidx.compose.runtime.*
 
 @Composable
 fun App() {
-    Text("Haloooo")
+    Text("Hello from Thinkivo!")
+    // TODO: Add more UI components
 }
