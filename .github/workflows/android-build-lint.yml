@@ -49,7 +49,11 @@ jobs:
           # Extract ktlint issues from the output
           if grep -E "\.kt:[0-9]+:[0-9]+" ktlint-report.txt > ktlint-issues.txt; then
             # Count issues
-            ISSUE_COUNT=$(wc -l < ktlint-issues.txt)
+            ISSUE_COUNT=$(wc -l < ktlint-issues.txt | tr -d ' ')
+            # Ensure ISSUE_COUNT is a valid number
+            if ! [[ "$ISSUE_COUNT" =~ ^[0-9]+$ ]]; then
+              ISSUE_COUNT=0
+            fi
             echo "issue_count=${ISSUE_COUNT}" >> $GITHUB_OUTPUT
             echo "status=issues_found" >> $GITHUB_OUTPUT
           else

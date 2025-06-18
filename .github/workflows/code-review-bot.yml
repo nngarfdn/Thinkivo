@@ -79,9 +79,22 @@ jobs:
             TOTAL_ISSUES=0
             while IFS= read -r file; do
               if [ -n "$file" ] && [ "$file" != "No Kotlin files changed" ]; then
-                ISSUES=$(grep -c "$file:" detailed-ktlint-report.txt 2>/dev/null || echo "0")
-                TOTAL_ISSUES=$((TOTAL_ISSUES + ISSUES))
-                if [ "$ISSUES" -gt 0 ]; then
+                # Use a more robust approach to count issues
+                FILE_BASENAME=$(basename "$file")
+                ISSUES_RAW=$(grep -c "$FILE_BASENAME:" detailed-ktlint-report.txt 2>/dev/null || echo "0")
+                ISSUES=$(echo "$ISSUES_RAW" | tr -d ' ' | tr -d '\t')
+                
+                # Validate that ISSUES is a number
+                case "$ISSUES" in
+                  ''|*[!0-9]*) ISSUES=0 ;;
+                  *) ;;
+                esac
+                
+                # Add to total (use expr to avoid arithmetic expansion issues)
+                TOTAL_ISSUES=$(expr "$TOTAL_ISSUES" + "$ISSUES" 2>/dev/null || echo "$TOTAL_ISSUES")
+                
+                # Report issues for this file
+                if [ "$ISSUES" != "0" ] && [ "$ISSUES" -gt 0 ] 2>/dev/null; then
                   echo "- **$file:** $ISSUES issues" >> review-summary.md
                 fi
               fi
@@ -90,13 +103,15 @@ jobs:
             echo "- **Total issues:** $TOTAL_ISSUES" >> review-summary.md
             echo "" >> review-summary.md
             
-            if [ "$TOTAL_ISSUES" -gt 0 ]; then
+            # Check if we have any issues (using string comparison to avoid arithmetic issues)
+            if [ "$TOTAL_ISSUES" != "0" ] && [ "$TOTAL_ISSUES" -gt 0 ] 2>/dev/null; then
               echo "## 🔍 Detailed Issues" >> review-summary.md
               echo "" >> review-summary.md
               
               while IFS= read -r file; do
                 if [ -n "$file" ] && [ "$file" != "No Kotlin files changed" ]; then
-                  FILE_ISSUES=$(grep "$file:" detailed-ktlint-report.txt 2>/dev/null || true)
+                  FILE_BASENAME=$(basename "$file")
+                  FILE_ISSUES=$(grep "$FILE_BASENAME:" detailed-ktlint-report.txt 2>/dev/null || true)
                   if [ -n "$FILE_ISSUES" ]; then
                     echo "### 📄 $file" >> review-summary.md
                     echo "\`\`\`" >> review-summary.md
