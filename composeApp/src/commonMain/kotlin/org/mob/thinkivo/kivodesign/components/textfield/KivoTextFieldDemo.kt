@@ -20,17 +20,18 @@ import org.mob.thinkivo.kivodesign.theme.KivoTheme
 @Composable
 fun KivoTextFieldDemo() {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(32.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(32.dp),
     ) {
         // Title with green accent
         Text(
             text = "Contained",
             style = KivoTheme.typography.H4,
             color = KivoTheme.colors.onSurface,
-            modifier = Modifier.padding(start = KivoTheme.spacing.xs)
+            modifier = Modifier.padding(start = KivoTheme.spacing.xs),
         )
 
         // Default Section
@@ -38,29 +39,27 @@ fun KivoTextFieldDemo() {
             title = "Default",
             content = {
                 DefaultContainedFields()
-            }
+            },
         )
-
-
     }
 }
 
 @Composable
 private fun ContainedTextFieldSection(
     title: String,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text(
             text = title,
             style = KivoTheme.typography.H6,
-            color = KivoTheme.colors.onSurfaceVariant
+            color = KivoTheme.colors.onSurfaceVariant,
         )
-        
+
         Column(
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             content()
         }
@@ -79,7 +78,7 @@ private fun DefaultContainedFields() {
         value = normalState,
         onValueChange = { normalState = it },
         placeholder = "Placeholder",
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 
     // Focused state (with blue border)
@@ -87,7 +86,7 @@ private fun DefaultContainedFields() {
         value = focusedState,
         onValueChange = { focusedState = it },
         placeholder = "Placeholder",
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 
     // Disabled state
@@ -96,7 +95,7 @@ private fun DefaultContainedFields() {
         onValueChange = { disabledState = it },
         placeholder = "Placeholder",
         enabled = false,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 
     // Error state
@@ -106,6 +105,6 @@ private fun DefaultContainedFields() {
         placeholder = "Placeholder",
         isError = true,
         supportingText = "Error message text",
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 }

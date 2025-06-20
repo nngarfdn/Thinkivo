@@ -61,28 +61,32 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        KivoTheme.colors.primary.copy(alpha = 0.1f),
-                        KivoTheme.colors.background,
-                        KivoTheme.colors.surface
-                    )
-                )
-            )
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(
+                    brush =
+                        Brush.verticalGradient(
+                            colors =
+                                listOf(
+                                    KivoTheme.colors.primary.copy(alpha = 0.1f),
+                                    KivoTheme.colors.background,
+                                    KivoTheme.colors.surface,
+                                ),
+                        ),
+                ),
     ) {
         // Background decorative elements
         BackgroundDecoration()
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .let { if (enableScrolling) it.verticalScroll(rememberScrollState()) else it }
-                .padding(KivoTheme.spacing.l),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .let { if (enableScrolling) it.verticalScroll(rememberScrollState()) else it }
+                    .padding(KivoTheme.spacing.l),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             Spacer(modifier = Modifier.height(60.dp))
 
@@ -100,14 +104,14 @@ fun LoginScreen(
                 onPasswordChange = { onEvent(LoginEvent.PasswordChanged(it)) },
                 onPasswordVisibilityToggle = { onEvent(LoginEvent.TogglePasswordVisibility) },
                 onLoginClick = { onEvent(LoginEvent.Login) },
-                onForgotPasswordClick = { onEvent(LoginEvent.ForgotPassword) }
+                onForgotPasswordClick = { onEvent(LoginEvent.ForgotPassword) },
             )
 
             Spacer(modifier = Modifier.height(KivoTheme.spacing.xl))
 
             // Social Login Section
             SocialLoginSection(
-                onGoogleLoginClick = { onEvent(LoginEvent.GoogleLogin) }
+                onGoogleLoginClick = { onEvent(LoginEvent.GoogleLogin) },
             )
 
             Spacer(modifier = Modifier.height(KivoTheme.spacing.xl))
@@ -123,32 +127,34 @@ fun LoginScreen(
 @Composable
 private fun BackgroundDecoration() {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         // Top-right decorative circle
         Box(
-            modifier = Modifier
-                .size(200.dp)
-                .align(Alignment.TopEnd)
-                .offset(x = 100.dp, y = (-100).dp)
-                .background(
-                    KivoTheme.colors.primary.copy(alpha = 0.1f),
-                    CircleShape
-                )
-                .blur(50.dp)
+            modifier =
+                Modifier
+                    .size(200.dp)
+                    .align(Alignment.TopEnd)
+                    .offset(x = 100.dp, y = (-100).dp)
+                    .background(
+                        KivoTheme.colors.primary.copy(alpha = 0.1f),
+                        CircleShape,
+                    )
+                    .blur(50.dp),
         )
 
         // Bottom-left decorative circle
         Box(
-            modifier = Modifier
-                .size(150.dp)
-                .align(Alignment.BottomStart)
-                .offset(x = (-75).dp, y = 75.dp)
-                .background(
-                    KivoTheme.colors.secondary.copy(alpha = 0.08f),
-                    CircleShape
-                )
-                .blur(40.dp)
+            modifier =
+                Modifier
+                    .size(150.dp)
+                    .align(Alignment.BottomStart)
+                    .offset(x = (-75).dp, y = 75.dp)
+                    .background(
+                        KivoTheme.colors.secondary.copy(alpha = 0.08f),
+                        CircleShape,
+                    )
+                    .blur(40.dp),
         )
     }
 }
@@ -157,28 +163,31 @@ private fun BackgroundDecoration() {
 private fun WelcomeSection() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(KivoTheme.spacing.m)
+        verticalArrangement = Arrangement.spacedBy(KivoTheme.spacing.m),
     ) {
         // App Logo/Icon
         Box(
-            modifier = Modifier
-                .size(80.dp)
-                .background(
-                    brush = Brush.linearGradient(
-                        colors = listOf(
-                            KivoTheme.colors.primary,
-                            KivoTheme.colors.primary.copy(alpha = 0.8f)
-                        )
+            modifier =
+                Modifier
+                    .size(80.dp)
+                    .background(
+                        brush =
+                            Brush.linearGradient(
+                                colors =
+                                    listOf(
+                                        KivoTheme.colors.primary,
+                                        KivoTheme.colors.primary.copy(alpha = 0.8f),
+                                    ),
+                            ),
+                        shape = RoundedCornerShape(20.dp),
                     ),
-                    shape = RoundedCornerShape(20.dp)
-                ),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = "K",
                 style = KivoTheme.typography.H2,
                 color = KivoTheme.colors.onPrimary,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
         }
 
@@ -186,14 +195,14 @@ private fun WelcomeSection() {
             text = "Welcome Back!",
             style = KivoTheme.typography.H3,
             color = KivoTheme.colors.onSurface,
-            fontWeight = FontWeight.Bold
+            fontWeight = FontWeight.Bold,
         )
 
         Text(
             text = "Sign in to continue your journey",
             style = KivoTheme.typography.BodyLarge,
             color = KivoTheme.colors.onSurfaceVariant,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -207,31 +216,35 @@ private fun LoginCard(
     onPasswordChange: (String) -> Unit,
     onPasswordVisibilityToggle: () -> Unit,
     onLoginClick: () -> Unit,
-    onForgotPasswordClick: () -> Unit
+    onForgotPasswordClick: () -> Unit,
 ) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = KivoTheme.spacing.xs),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = KivoTheme.spacing.xs),
         shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = KivoTheme.colors.surface.copy(alpha = 0.95f)
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 8.dp
-        )
+        colors =
+            CardDefaults.cardColors(
+                containerColor = KivoTheme.colors.surface.copy(alpha = 0.95f),
+            ),
+        elevation =
+            CardDefaults.cardElevation(
+                defaultElevation = 8.dp,
+            ),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(KivoTheme.spacing.xl),
-            verticalArrangement = Arrangement.spacedBy(KivoTheme.spacing.l)
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(KivoTheme.spacing.xl),
+            verticalArrangement = Arrangement.spacedBy(KivoTheme.spacing.l),
         ) {
             Text(
                 text = "Sign In",
                 style = KivoTheme.typography.H5,
                 color = KivoTheme.colors.onSurface,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
             )
 
             // Email Field
@@ -243,11 +256,11 @@ private fun LoginCard(
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Email,
-                        contentDescription = "Email"
+                        contentDescription = "Email",
                     )
                 },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
             )
 
             // Password Field
@@ -259,32 +272,32 @@ private fun LoginCard(
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.Lock,
-                        contentDescription = "Password"
+                        contentDescription = "Password",
                     )
                 },
                 trailingIcon = {
                     IconButton(onClick = onPasswordVisibilityToggle) {
                         Icon(
                             imageVector = if (isPasswordVisible) Icons.Default.VisibilityOff else Icons.Default.Visibility,
-                            contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
+                            contentDescription = if (isPasswordVisible) "Hide password" else "Show password",
                         )
                     }
                 },
                 visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
+                shape = RoundedCornerShape(12.dp),
             )
 
             // Forgot Password
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.End,
             ) {
                 TextButton(onClick = onForgotPasswordClick) {
                     Text(
                         text = "Forgot Password?",
                         style = KivoTheme.typography.BodyMedium,
-                        color = KivoTheme.colors.primary
+                        color = KivoTheme.colors.primary,
                     )
                 }
             }
@@ -293,67 +306,69 @@ private fun LoginCard(
             KivoButton(
                 text = "Sign In",
                 onClick = onLoginClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
-                size = KivoButtonSize.Large
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                size = KivoButtonSize.Large,
             )
         }
     }
 }
 
 @Composable
-private fun SocialLoginSection(
-    onGoogleLoginClick: () -> Unit
-) {
+private fun SocialLoginSection(onGoogleLoginClick: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(KivoTheme.spacing.l)
+        verticalArrangement = Arrangement.spacedBy(KivoTheme.spacing.l),
     ) {
         // Divider with text
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(KivoTheme.spacing.m)
+            horizontalArrangement = Arrangement.spacedBy(KivoTheme.spacing.m),
         ) {
             HorizontalDivider(
                 modifier = Modifier.weight(1f),
-                color = KivoTheme.colors.outline.copy(alpha = 0.5f)
+                color = KivoTheme.colors.outline.copy(alpha = 0.5f),
             )
             Text(
                 text = "Or continue with",
                 style = KivoTheme.typography.BodySmall,
-                color = KivoTheme.colors.onSurfaceVariant
+                color = KivoTheme.colors.onSurfaceVariant,
             )
             HorizontalDivider(
                 modifier = Modifier.weight(1f),
-                color = KivoTheme.colors.outline.copy(alpha = 0.5f)
+                color = KivoTheme.colors.outline.copy(alpha = 0.5f),
             )
         }
 
         // Google Login Button - Full Width
         Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = KivoTheme.colors.surface
-            ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+            colors =
+                CardDefaults.cardColors(
+                    containerColor = KivoTheme.colors.surface,
+                ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 KivoButton(
                     text = "Continue with Google",
                     onClick = onGoogleLoginClick,
                     style = KivoButtonStyle.Outlined,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    size = KivoButtonSize.Large
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .height(56.dp),
+                    size = KivoButtonSize.Large,
                 )
             }
         }
@@ -361,24 +376,22 @@ private fun SocialLoginSection(
 }
 
 @Composable
-private fun SignUpSection(
-    onSignUpClick: () -> Unit
-) {
+private fun SignUpSection(onSignUpClick: () -> Unit) {
     Row(
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = "Don't have an account? ",
             style = KivoTheme.typography.BodyMedium,
-            color = KivoTheme.colors.onSurfaceVariant
+            color = KivoTheme.colors.onSurfaceVariant,
         )
         TextButton(onClick = onSignUpClick) {
             Text(
                 text = "Sign Up",
                 style = KivoTheme.typography.BodyMedium,
                 color = KivoTheme.colors.primary,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
             )
         }
     }

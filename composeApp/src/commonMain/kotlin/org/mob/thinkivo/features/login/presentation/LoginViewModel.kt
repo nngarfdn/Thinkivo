@@ -5,7 +5,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class LoginViewModel {
-
     private val _state = MutableStateFlow(LoginState())
     val state = _state.asStateFlow()
 

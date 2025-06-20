@@ -24,17 +24,18 @@ import org.mob.thinkivo.kivodesign.theme.KivoTheme
 @Composable
 fun KivoTextFieldSample() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
         // Header
         Text(
             text = "Text Field Components",
             style = KivoTheme.typography.H4,
-            color = KivoTheme.colors.onSurface
+            color = KivoTheme.colors.onSurface,
         )
 
         // Default Section
@@ -42,7 +43,7 @@ fun KivoTextFieldSample() {
             title = "Default",
             content = {
                 DefaultTextFields()
-            }
+            },
         )
     }
 }
@@ -50,23 +51,23 @@ fun KivoTextFieldSample() {
 @Composable
 private fun TextFieldSection(
     title: String,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     Column(
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Text(
             text = title,
             style = KivoTheme.typography.H6,
-            color = KivoTheme.colors.onSurface
+            color = KivoTheme.colors.onSurface,
         )
-        
+
         Card(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Column(
                 modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 content()
             }
@@ -87,7 +88,7 @@ private fun DefaultTextFields() {
         onValueChange = { defaultText = it },
         placeholder = "Enter text...",
         label = "Default Text Field",
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 
     // Focused state
@@ -96,7 +97,7 @@ private fun DefaultTextFields() {
         onValueChange = { focusedText = it },
         placeholder = "Enter text...",
         label = "Focused Text Field",
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 
     // Disabled state
@@ -106,7 +107,7 @@ private fun DefaultTextFields() {
         placeholder = "Enter text...",
         label = "Disabled Text Field",
         enabled = false,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 
     // Error state
@@ -117,6 +118,6 @@ private fun DefaultTextFields() {
         label = "Error Text Field",
         isError = true,
         supportingText = "This field has an error",
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     )
 }

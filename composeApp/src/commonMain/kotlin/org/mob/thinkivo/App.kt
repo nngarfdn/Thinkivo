@@ -16,8 +16,7 @@ fun App() {
         val state by viewModel.state.collectAsState()
         LoginScreen(
             state = state,
-            onEvent = viewModel::onEvent
+            onEvent = viewModel::onEvent,
         )
     }
 }
-

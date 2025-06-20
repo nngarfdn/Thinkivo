@@ -24,18 +24,18 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun KivoButtonDemo() {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.spacedBy(24.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+                .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(24.dp),
     ) {
-
         // Fill Section
         Text(
             text = "Fill",
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp),
         )
 
         FilledButtonRows()
@@ -46,7 +46,7 @@ fun KivoButtonDemo() {
         Text(
             text = "Outline",
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp),
         )
 
         OutlinedButtonRows()
@@ -57,7 +57,7 @@ fun KivoButtonDemo() {
         Text(
             text = "Color Variants",
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp),
         )
 
         ColorVariantsDemo()
@@ -67,16 +67,15 @@ fun KivoButtonDemo() {
 @Composable
 private fun FilledButtonRows() {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-
         // Extra Large Row
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             KivoButton(
                 text = "Button",
                 onClick = { },
-                size = KivoButtonSize.ExtraLarge
+                size = KivoButtonSize.ExtraLarge,
             )
 
             KivoTextIconButton(
@@ -84,7 +83,7 @@ private fun FilledButtonRows() {
                 icon = Icons.Default.Favorite,
                 contentDescription = "Favorite",
                 onClick = { },
-                size = KivoButtonSize.ExtraLarge
+                size = KivoButtonSize.ExtraLarge,
             )
 
             KivoTextIconButton(
@@ -93,38 +92,38 @@ private fun FilledButtonRows() {
                 contentDescription = "Favorite",
                 onClick = { },
                 iconPosition = KivoIconPosition.Trailing,
-                size = KivoButtonSize.ExtraLarge
+                size = KivoButtonSize.ExtraLarge,
             )
 
             KivoIconButton(
                 icon = Icons.Default.Favorite,
                 contentDescription = "Favorite",
                 onClick = { },
-                size = KivoButtonSize.IconLarge
+                size = KivoButtonSize.IconLarge,
             )
 
             KivoButton(
                 text = "L",
                 onClick = { },
-                size = KivoButtonSize.IconLarge
+                size = KivoButtonSize.IconLarge,
             )
 
             KivoButton(
                 text = "12",
                 onClick = { },
-                size = KivoButtonSize.IconLarge
+                size = KivoButtonSize.IconLarge,
             )
         }
 
         // Large Row
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             KivoButton(
                 text = "Button",
                 onClick = { },
-                size = KivoButtonSize.Large
+                size = KivoButtonSize.Large,
             )
 
             KivoTextIconButton(
@@ -132,7 +131,7 @@ private fun FilledButtonRows() {
                 icon = Icons.Default.Favorite,
                 contentDescription = "Favorite",
                 onClick = { },
-                size = KivoButtonSize.Large
+                size = KivoButtonSize.Large,
             )
 
             KivoTextIconButton(
@@ -141,38 +140,38 @@ private fun FilledButtonRows() {
                 contentDescription = "Favorite",
                 onClick = { },
                 iconPosition = KivoIconPosition.Trailing,
-                size = KivoButtonSize.Large
+                size = KivoButtonSize.Large,
             )
 
             KivoIconButton(
                 icon = Icons.Default.Favorite,
                 contentDescription = "Favorite",
                 onClick = { },
-                size = KivoButtonSize.IconMedium
+                size = KivoButtonSize.IconMedium,
             )
 
             KivoButton(
                 text = "L",
                 onClick = { },
-                size = KivoButtonSize.IconMedium
+                size = KivoButtonSize.IconMedium,
             )
 
             KivoButton(
                 text = "12",
                 onClick = { },
-                size = KivoButtonSize.IconMedium
+                size = KivoButtonSize.IconMedium,
             )
         }
 
         // Medium Row
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             KivoButton(
                 text = "Button",
                 onClick = { },
-                size = KivoButtonSize.Medium
+                size = KivoButtonSize.Medium,
             )
 
             KivoTextIconButton(
@@ -180,7 +179,7 @@ private fun FilledButtonRows() {
                 icon = Icons.Default.Favorite,
                 contentDescription = "Favorite",
                 onClick = { },
-                size = KivoButtonSize.Medium
+                size = KivoButtonSize.Medium,
             )
 
             KivoTextIconButton(
@@ -189,38 +188,38 @@ private fun FilledButtonRows() {
                 contentDescription = "Favorite",
                 onClick = { },
                 iconPosition = KivoIconPosition.Trailing,
-                size = KivoButtonSize.Medium
+                size = KivoButtonSize.Medium,
             )
 
             KivoIconButton(
                 icon = Icons.Default.Favorite,
                 contentDescription = "Favorite",
                 onClick = { },
-                size = KivoButtonSize.IconSmall
+                size = KivoButtonSize.IconSmall,
             )
 
             KivoButton(
                 text = "M",
                 onClick = { },
-                size = KivoButtonSize.IconSmall
+                size = KivoButtonSize.IconSmall,
             )
 
             KivoButton(
                 text = "12",
                 onClick = { },
-                size = KivoButtonSize.IconSmall
+                size = KivoButtonSize.IconSmall,
             )
         }
 
         // Small Row
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             KivoButton(
                 text = "Button",
                 onClick = { },
-                size = KivoButtonSize.Small
+                size = KivoButtonSize.Small,
             )
 
             KivoTextIconButton(
@@ -228,7 +227,7 @@ private fun FilledButtonRows() {
                 icon = Icons.Default.Favorite,
                 contentDescription = "Favorite",
                 onClick = { },
-                size = KivoButtonSize.Small
+                size = KivoButtonSize.Small,
             )
 
             KivoTextIconButton(
@@ -237,26 +236,26 @@ private fun FilledButtonRows() {
                 contentDescription = "Favorite",
                 onClick = { },
                 iconPosition = KivoIconPosition.Trailing,
-                size = KivoButtonSize.Small
+                size = KivoButtonSize.Small,
             )
 
             KivoIconButton(
                 icon = Icons.Default.Favorite,
                 contentDescription = "Favorite",
                 onClick = { },
-                size = KivoButtonSize.IconSmall
+                size = KivoButtonSize.IconSmall,
             )
 
             KivoButton(
                 text = "S",
                 onClick = { },
-                size = KivoButtonSize.IconSmall
+                size = KivoButtonSize.IconSmall,
             )
 
             KivoButton(
                 text = "12",
                 onClick = { },
-                size = KivoButtonSize.IconSmall
+                size = KivoButtonSize.IconSmall,
             )
         }
     }
@@ -265,17 +264,16 @@ private fun FilledButtonRows() {
 @Composable
 private fun OutlinedButtonRows() {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-
         // Extra Large Outlined Row
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             KivoButton(
                 text = "Button",
                 onClick = { },
                 style = KivoButtonStyle.Outlined,
-                size = KivoButtonSize.ExtraLarge
+                size = KivoButtonSize.ExtraLarge,
             )
 
             KivoTextIconButton(
@@ -284,7 +282,7 @@ private fun OutlinedButtonRows() {
                 contentDescription = "Favorite",
                 onClick = { },
                 style = KivoButtonStyle.Outlined,
-                size = KivoButtonSize.ExtraLarge
+                size = KivoButtonSize.ExtraLarge,
             )
 
             KivoTextIconButton(
@@ -294,7 +292,7 @@ private fun OutlinedButtonRows() {
                 onClick = { },
                 style = KivoButtonStyle.Outlined,
                 iconPosition = KivoIconPosition.Trailing,
-                size = KivoButtonSize.ExtraLarge
+                size = KivoButtonSize.ExtraLarge,
             )
 
             KivoIconButton(
@@ -302,21 +300,21 @@ private fun OutlinedButtonRows() {
                 contentDescription = "Favorite",
                 onClick = { },
                 style = KivoButtonStyle.Outlined,
-                size = KivoButtonSize.IconLarge
+                size = KivoButtonSize.IconLarge,
             )
 
             KivoButton(
                 text = "L",
                 onClick = { },
                 style = KivoButtonStyle.Outlined,
-                size = KivoButtonSize.IconLarge
+                size = KivoButtonSize.IconLarge,
             )
 
             KivoButton(
                 text = "12",
                 onClick = { },
                 style = KivoButtonStyle.Outlined,
-                size = KivoButtonSize.IconLarge
+                size = KivoButtonSize.IconLarge,
             )
         }
 
@@ -329,36 +327,36 @@ private fun OutlinedButtonRows() {
 private fun ColorVariantsDemo() {
     Row(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         KivoButton(
             text = "Primary",
             onClick = { },
-            colors = KivoButtonDefaults.colors()
+            colors = KivoButtonDefaults.colors(),
         )
 
         KivoButton(
             text = "Danger",
             onClick = { },
-            colors = KivoButtonDefaults.dangerColors()
+            colors = KivoButtonDefaults.dangerColors(),
         )
 
         KivoButton(
             text = "Success",
             onClick = { },
-            colors = KivoButtonDefaults.successColors()
+            colors = KivoButtonDefaults.successColors(),
         )
 
         KivoButton(
             text = "Warning",
             onClick = { },
-            colors = KivoButtonDefaults.warningColors()
+            colors = KivoButtonDefaults.warningColors(),
         )
 
         KivoButton(
             text = "Secondary",
             onClick = { },
-            colors = KivoButtonDefaults.secondaryColors()
+            colors = KivoButtonDefaults.secondaryColors(),
         )
     }
 }

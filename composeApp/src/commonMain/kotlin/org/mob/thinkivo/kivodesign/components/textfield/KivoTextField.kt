@@ -36,7 +36,7 @@ fun KivoTextField(
                 text = label,
                 style = KivoTheme.typography.LabelMedium,
                 color = if (isError) KivoTheme.colors.error else KivoTheme.colors.onSurfaceVariant,
-                modifier = Modifier.padding(bottom = KivoTheme.spacing.xs)
+                modifier = Modifier.padding(bottom = KivoTheme.spacing.xs),
             )
         }
 
@@ -47,22 +47,26 @@ fun KivoTextField(
             modifier = Modifier.fillMaxWidth(),
             enabled = enabled,
             readOnly = readOnly,
-            placeholder = if (placeholder != null) {
-                {
-                    Text(
-                        text = placeholder,
-                        style = KivoTheme.typography.BodyMedium,
-                        color = KivoTheme.colors.onSurfaceVariant
-                    )
-                }
-            } else null,
+            placeholder =
+                if (placeholder != null) {
+                    {
+                        Text(
+                            text = placeholder,
+                            style = KivoTheme.typography.BodyMedium,
+                            color = KivoTheme.colors.onSurfaceVariant,
+                        )
+                    }
+                } else {
+                    null
+                },
             isError = isError,
             shape = RoundedCornerShape(8.dp),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = if (isError) KivoTheme.colors.error else KivoTheme.colors.primary,
-                unfocusedIndicatorColor = if (isError) KivoTheme.colors.error else KivoTheme.colors.outline,
-                errorIndicatorColor = KivoTheme.colors.error,
-            )
+            colors =
+                TextFieldDefaults.colors(
+                    focusedIndicatorColor = if (isError) KivoTheme.colors.error else KivoTheme.colors.primary,
+                    unfocusedIndicatorColor = if (isError) KivoTheme.colors.error else KivoTheme.colors.outline,
+                    errorIndicatorColor = KivoTheme.colors.error,
+                ),
         )
 
         // Supporting Text
@@ -71,7 +75,7 @@ fun KivoTextField(
                 text = supportingText,
                 style = KivoTheme.typography.Caption,
                 color = if (isError) KivoTheme.colors.error else KivoTheme.colors.onSurfaceVariant,
-                modifier = Modifier.padding(start = KivoTheme.spacing.m, top = KivoTheme.spacing.xs)
+                modifier = Modifier.padding(start = KivoTheme.spacing.m, top = KivoTheme.spacing.xs),
             )
         }
     }
@@ -126,23 +130,24 @@ object KivoTextFieldDefaults {
         disabledPlaceholderColor: Color = KivoTheme.colors.onSurface.copy(alpha = 0.38f),
         supportingTextColor: Color = KivoTheme.colors.onSurfaceVariant,
         disabledSupportingTextColor: Color = KivoTheme.colors.onSurface.copy(alpha = 0.38f),
-    ): KivoTextFieldColors = KivoTextFieldColors(
-        textColor = textColor,
-        disabledTextColor = disabledTextColor,
-        containerColor = containerColor,
-        disabledContainerColor = disabledContainerColor,
-        cursorColor = cursorColor,
-        focusedBorderColor = focusedBorderColor,
-        unfocusedBorderColor = unfocusedBorderColor,
-        disabledBorderColor = disabledBorderColor,
-        errorColor = errorColor,
-        iconColor = iconColor,
-        disabledIconColor = disabledIconColor,
-        labelColor = labelColor,
-        disabledLabelColor = disabledLabelColor,
-        placeholderColor = placeholderColor,
-        disabledPlaceholderColor = disabledPlaceholderColor,
-        supportingTextColor = supportingTextColor,
-        disabledSupportingTextColor = disabledSupportingTextColor,
-    )
+    ): KivoTextFieldColors =
+        KivoTextFieldColors(
+            textColor = textColor,
+            disabledTextColor = disabledTextColor,
+            containerColor = containerColor,
+            disabledContainerColor = disabledContainerColor,
+            cursorColor = cursorColor,
+            focusedBorderColor = focusedBorderColor,
+            unfocusedBorderColor = unfocusedBorderColor,
+            disabledBorderColor = disabledBorderColor,
+            errorColor = errorColor,
+            iconColor = iconColor,
+            disabledIconColor = disabledIconColor,
+            labelColor = labelColor,
+            disabledLabelColor = disabledLabelColor,
+            placeholderColor = placeholderColor,
+            disabledPlaceholderColor = disabledPlaceholderColor,
+            supportingTextColor = supportingTextColor,
+            disabledSupportingTextColor = disabledSupportingTextColor,
+        )
 }
