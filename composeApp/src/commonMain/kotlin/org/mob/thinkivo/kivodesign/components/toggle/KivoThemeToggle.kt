@@ -27,31 +27,31 @@ fun KivoThemeToggle(
     isDarkTheme: Boolean,
     onThemeChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    showLabel: Boolean = true
+    showLabel: Boolean = true,
 ) {
     Row(
         modifier = modifier.padding(horizontal = KivoTheme.spacing.m),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(KivoTheme.spacing.s)
+        horizontalArrangement = Arrangement.spacedBy(KivoTheme.spacing.s),
     ) {
         // Light mode icon
         Icon(
             imageVector = Icons.Default.LightMode,
             contentDescription = "Light mode",
-            tint = if (!isDarkTheme) KivoTheme.colors.primary else KivoTheme.colors.onSurfaceVariant
+            tint = if (!isDarkTheme) KivoTheme.colors.primary else KivoTheme.colors.onSurfaceVariant,
         )
 
         // Theme toggle switch
         Switch(
             checked = isDarkTheme,
-            onCheckedChange = onThemeChange
+            onCheckedChange = onThemeChange,
         )
 
         // Dark mode icon
         Icon(
             imageVector = Icons.Default.DarkMode,
             contentDescription = "Dark mode",
-            tint = if (isDarkTheme) KivoTheme.colors.primary else KivoTheme.colors.onSurfaceVariant
+            tint = if (isDarkTheme) KivoTheme.colors.primary else KivoTheme.colors.onSurfaceVariant,
         )
 
         // Optional label
@@ -59,7 +59,7 @@ fun KivoThemeToggle(
             Text(
                 text = if (isDarkTheme) "Dark" else "Light",
                 style = KivoTheme.typography.LabelMedium,
-                color = KivoTheme.colors.onSurface
+                color = KivoTheme.colors.onSurface,
             )
         }
     }

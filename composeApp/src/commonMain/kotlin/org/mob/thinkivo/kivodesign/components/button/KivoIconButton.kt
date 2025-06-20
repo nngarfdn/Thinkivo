@@ -41,34 +41,40 @@ fun KivoIconButton(
     style: KivoButtonStyle = KivoButtonStyle.Filled,
     size: KivoButtonSize = KivoButtonSize.IconLarge,
     colors: KivoButtonColors = KivoButtonDefaults.colors(),
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    val buttonColors = when (style) {
-        KivoButtonStyle.Filled -> ButtonDefaults.buttonColors(
-            containerColor = colors.containerColor,
-            contentColor = colors.contentColor,
-            disabledContainerColor = colors.disabledContainerColor,
-            disabledContentColor = colors.disabledContentColor
-        )
+    val buttonColors =
+        when (style) {
+            KivoButtonStyle.Filled ->
+                ButtonDefaults.buttonColors(
+                    containerColor = colors.containerColor,
+                    contentColor = colors.contentColor,
+                    disabledContainerColor = colors.disabledContainerColor,
+                    disabledContentColor = colors.disabledContentColor,
+                )
 
-        KivoButtonStyle.Outlined -> ButtonDefaults.outlinedButtonColors(
-            containerColor = Color.Transparent,
-            contentColor = colors.containerColor,
-            disabledContainerColor = Color.Transparent,
-            disabledContentColor = colors.disabledContainerColor
-        )
-    }
+            KivoButtonStyle.Outlined ->
+                ButtonDefaults.outlinedButtonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = colors.containerColor,
+                    disabledContainerColor = Color.Transparent,
+                    disabledContentColor = colors.disabledContainerColor,
+                )
+        }
 
-    val border = when (style) {
-        KivoButtonStyle.Filled -> null
-        KivoButtonStyle.Outlined -> BorderStroke(
-            width = 1.dp,
-            color = if (enabled) colors.containerColor else colors.disabledContainerColor
-        )
-    }
+    val border =
+        when (style) {
+            KivoButtonStyle.Filled -> null
+            KivoButtonStyle.Outlined ->
+                BorderStroke(
+                    width = 1.dp,
+                    color = if (enabled) colors.containerColor else colors.disabledContainerColor,
+                )
+        }
 
-    val buttonModifier = modifier
-        .size(size.height)
+    val buttonModifier =
+        modifier
+            .size(size.height)
 
     when (style) {
         KivoButtonStyle.Filled -> {
@@ -79,19 +85,20 @@ fun KivoIconButton(
                 shape = size.shape,
                 colors = buttonColors,
                 contentPadding = size.contentPadding,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
             ) {
                 Icon(
                     imageVector = icon,
                     contentDescription = contentDescription,
-                    modifier = Modifier.size(
-                        when (size) {
-                            is KivoButtonSize.IconLarge -> 24.dp
-                            is KivoButtonSize.IconMedium -> 20.dp
-                            is KivoButtonSize.IconSmall -> 16.dp
-                            else -> 24.dp
-                        }
-                    )
+                    modifier =
+                        Modifier.size(
+                            when (size) {
+                                is KivoButtonSize.IconLarge -> 24.dp
+                                is KivoButtonSize.IconMedium -> 20.dp
+                                is KivoButtonSize.IconSmall -> 16.dp
+                                else -> 24.dp
+                            },
+                        ),
                 )
             }
         }
@@ -105,19 +112,20 @@ fun KivoIconButton(
                 colors = buttonColors,
                 border = border,
                 contentPadding = size.contentPadding,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
             ) {
                 Icon(
                     imageVector = icon,
                     contentDescription = contentDescription,
-                    modifier = Modifier.size(
-                        when (size) {
-                            is KivoButtonSize.IconLarge -> 24.dp
-                            is KivoButtonSize.IconMedium -> 20.dp
-                            is KivoButtonSize.IconSmall -> 16.dp
-                            else -> 24.dp
-                        }
-                    )
+                    modifier =
+                        Modifier.size(
+                            when (size) {
+                                is KivoButtonSize.IconLarge -> 24.dp
+                                is KivoButtonSize.IconMedium -> 20.dp
+                                is KivoButtonSize.IconSmall -> 16.dp
+                                else -> 24.dp
+                            },
+                        ),
                 )
             }
         }
@@ -152,41 +160,47 @@ fun KivoTextIconButton(
     style: KivoButtonStyle = KivoButtonStyle.Filled,
     size: KivoButtonSize = KivoButtonSize.Large,
     colors: KivoButtonColors = KivoButtonDefaults.colors(),
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    val buttonColors = when (style) {
-        KivoButtonStyle.Filled -> ButtonDefaults.buttonColors(
-            containerColor = colors.containerColor,
-            contentColor = colors.contentColor,
-            disabledContainerColor = colors.disabledContainerColor,
-            disabledContentColor = colors.disabledContentColor
-        )
+    val buttonColors =
+        when (style) {
+            KivoButtonStyle.Filled ->
+                ButtonDefaults.buttonColors(
+                    containerColor = colors.containerColor,
+                    contentColor = colors.contentColor,
+                    disabledContainerColor = colors.disabledContainerColor,
+                    disabledContentColor = colors.disabledContentColor,
+                )
 
-        KivoButtonStyle.Outlined -> ButtonDefaults.outlinedButtonColors(
-            containerColor = Color.Transparent,
-            contentColor = colors.containerColor,
-            disabledContainerColor = Color.Transparent,
-            disabledContentColor = colors.disabledContainerColor
-        )
-    }
+            KivoButtonStyle.Outlined ->
+                ButtonDefaults.outlinedButtonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = colors.containerColor,
+                    disabledContainerColor = Color.Transparent,
+                    disabledContentColor = colors.disabledContainerColor,
+                )
+        }
 
-    val border = when (style) {
-        KivoButtonStyle.Filled -> null
-        KivoButtonStyle.Outlined -> BorderStroke(
-            width = 1.dp,
-            color = if (enabled) colors.containerColor else colors.disabledContainerColor
-        )
-    }
+    val border =
+        when (style) {
+            KivoButtonStyle.Filled -> null
+            KivoButtonStyle.Outlined ->
+                BorderStroke(
+                    width = 1.dp,
+                    color = if (enabled) colors.containerColor else colors.disabledContainerColor,
+                )
+        }
 
     val buttonModifier = modifier.height(size.height)
 
-    val iconSize = when (size) {
-        is KivoButtonSize.ExtraLarge -> 24.dp
-        is KivoButtonSize.Large -> 20.dp
-        is KivoButtonSize.Medium -> 18.dp
-        is KivoButtonSize.Small -> 16.dp
-        else -> 20.dp
-    }
+    val iconSize =
+        when (size) {
+            is KivoButtonSize.ExtraLarge -> 24.dp
+            is KivoButtonSize.Large -> 20.dp
+            is KivoButtonSize.Medium -> 18.dp
+            is KivoButtonSize.Small -> 16.dp
+            else -> 20.dp
+        }
 
     when (style) {
         KivoButtonStyle.Filled -> {
@@ -197,7 +211,7 @@ fun KivoTextIconButton(
                 shape = size.shape,
                 colors = buttonColors,
                 contentPadding = size.contentPadding,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
             ) {
                 ButtonContent(
                     text = text,
@@ -205,7 +219,7 @@ fun KivoTextIconButton(
                     contentDescription = contentDescription,
                     iconPosition = iconPosition,
                     iconSize = iconSize,
-                    textStyle = size.textStyle
+                    textStyle = size.textStyle,
                 )
             }
         }
@@ -219,7 +233,7 @@ fun KivoTextIconButton(
                 colors = buttonColors,
                 border = border,
                 contentPadding = size.contentPadding,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
             ) {
                 ButtonContent(
                     text = text,
@@ -227,7 +241,7 @@ fun KivoTextIconButton(
                     contentDescription = contentDescription,
                     iconPosition = iconPosition,
                     iconSize = iconSize,
-                    textStyle = size.textStyle
+                    textStyle = size.textStyle,
                 )
             }
         }
@@ -241,34 +255,34 @@ private fun ButtonContent(
     contentDescription: String?,
     iconPosition: KivoIconPosition,
     iconSize: androidx.compose.ui.unit.Dp,
-    textStyle: androidx.compose.ui.text.TextStyle
+    textStyle: androidx.compose.ui.text.TextStyle,
 ) {
     Row(
         horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(8.dp),
-        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
     ) {
         when (iconPosition) {
             KivoIconPosition.Leading -> {
                 Icon(
                     imageVector = icon,
                     contentDescription = contentDescription,
-                    modifier = Modifier.size(iconSize)
+                    modifier = Modifier.size(iconSize),
                 )
                 Text(
                     text = text,
-                    style = textStyle
+                    style = textStyle,
                 )
             }
 
             KivoIconPosition.Trailing -> {
                 Text(
                     text = text,
-                    style = textStyle
+                    style = textStyle,
                 )
                 Icon(
                     imageVector = icon,
                     contentDescription = contentDescription,
-                    modifier = Modifier.size(iconSize)
+                    modifier = Modifier.size(iconSize),
                 )
             }
         }
@@ -280,5 +294,5 @@ private fun ButtonContent(
  */
 enum class KivoIconPosition {
     Leading,
-    Trailing
+    Trailing,
 }

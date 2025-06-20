@@ -9,30 +9,29 @@ import androidx.compose.ui.graphics.Color
  */
 @Immutable
 object ThinkivoColors {
-
     // Brand Colors - Primary Scale
-    val Primary = Color(0xFF1E88E5)  // Base Primary
+    val Primary = Color(0xFF1E88E5) // Base Primary
     val PrimaryDark = Color(0xFF1565C0)
     val PrimaryLight = Color(0xFF64B5F6)
     val PrimaryLighter = Color(0xFF90CAF9)
     val PrimaryLightest = Color(0xFFBBDEFB)
 
     // Brand Colors - Danger/Error Scale
-    val Danger = Color(0xFFD32F2F)  // Base Danger
+    val Danger = Color(0xFFD32F2F) // Base Danger
     val DangerDark = Color(0xFFC62828)
     val DangerLight = Color(0xFFEF5350)
     val DangerLighter = Color(0xFFE57373)
     val DangerLightest = Color(0xFFFFCDD2)
 
     // Brand Colors - Success Scale
-    val Success = Color(0xFF388E3C)  // Base Success
+    val Success = Color(0xFF388E3C) // Base Success
     val SuccessDark = Color(0xFF2E7D32)
     val SuccessLight = Color(0xFF66BB6A)
     val SuccessLighter = Color(0xFF81C784)
     val SuccessLightest = Color(0xFFC8E6C9)
 
     // Brand Colors - Warning Scale
-    val Warning = Color(0xFFFF9800)  // Base Warning
+    val Warning = Color(0xFFFF9800) // Base Warning
     val WarningDark = Color(0xFFEF6C00)
     val WarningLight = Color(0xFFFFB74D)
     val WarningLighter = Color(0xFFFFCC80)
@@ -93,7 +92,7 @@ object ThinkivoColors {
     object SystemWarning {
         val Warning1 = Color(0xFFBF6000)
         val Warning2 = Color(0xFFEF6C00)
-        val Warning3 = Color(0xFFFF9800)  // Base warning
+        val Warning3 = Color(0xFFFF9800) // Base warning
         val Warning4 = Color(0xFFFFB74D)
         val Warning5 = Color(0xFFFFCC80)
         val Warning6 = Color(0xFFFFE0B2)

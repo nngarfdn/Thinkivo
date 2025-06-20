@@ -3,11 +3,6 @@ description:
 globs: 
 alwaysApply: true
 ---
----
-description: 
-globs: 
-alwaysApply: true
----
 # KMP Compose Multiplatform Coding Rules
 
 ## Table of Contents

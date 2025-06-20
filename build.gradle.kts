@@ -12,7 +12,7 @@ plugins {
 
 allprojects {
     apply(plugin = "org.jlleitschuh.gradle.ktlint")
-    
+
     ktlint {
         version.set("1.0.1")
         debug.set(false)

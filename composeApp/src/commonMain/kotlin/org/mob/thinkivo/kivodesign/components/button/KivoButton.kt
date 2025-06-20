@@ -44,38 +44,46 @@ fun KivoButton(
     style: KivoButtonStyle = KivoButtonStyle.Filled,
     size: KivoButtonSize = KivoButtonSize.Large,
     colors: KivoButtonColors = KivoButtonDefaults.colors(),
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
-    val buttonColors = when (style) {
-        KivoButtonStyle.Filled -> ButtonDefaults.buttonColors(
-            containerColor = colors.containerColor,
-            contentColor = colors.contentColor,
-            disabledContainerColor = colors.disabledContainerColor,
-            disabledContentColor = colors.disabledContentColor
-        )
+    val buttonColors =
+        when (style) {
+            KivoButtonStyle.Filled ->
+                ButtonDefaults.buttonColors(
+                    containerColor = colors.containerColor,
+                    contentColor = colors.contentColor,
+                    disabledContainerColor = colors.disabledContainerColor,
+                    disabledContentColor = colors.disabledContentColor,
+                )
+            KivoButtonStyle.Outlined ->
+                ButtonDefaults.outlinedButtonColors(
+                    containerColor = Color.Transparent,
+                    contentColor = colors.containerColor,
+                    disabledContainerColor = Color.Transparent,
+                    disabledContentColor = colors.disabledContainerColor,
+                )
+        }
 
-        KivoButtonStyle.Outlined -> ButtonDefaults.outlinedButtonColors(
-            containerColor = Color.Transparent,
-            contentColor = colors.containerColor,
-            disabledContainerColor = Color.Transparent,
-            disabledContentColor = colors.disabledContainerColor
-        )
-    }
+    val border =
+        when (style) {
+            KivoButtonStyle.Filled -> null
+            KivoButtonStyle.Outlined ->
+                BorderStroke(
+                    width = 1.dp,
+                    color = if (enabled) colors.containerColor else colors.disabledContainerColor,
+                )
+        }
 
-    val border = when (style) {
-        KivoButtonStyle.Filled -> null
-        KivoButtonStyle.Outlined -> BorderStroke(
-            width = 1.dp,
-            color = if (enabled) colors.containerColor else colors.disabledContainerColor
-        )
-    }
-
-    val buttonModifier = modifier
-        .height(size.height)
-        .then(
-            if (size.width != null) Modifier.width(size.width)
-            else Modifier
-        )
+    val buttonModifier =
+        modifier
+            .height(size.height)
+            .then(
+                if (size.width != null) {
+                    Modifier.width(size.width)
+                } else {
+                    Modifier
+                },
+            )
 
     when (style) {
         KivoButtonStyle.Filled -> {
@@ -86,15 +94,14 @@ fun KivoButton(
                 shape = size.shape,
                 colors = buttonColors,
                 contentPadding = size.contentPadding,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
             ) {
                 Text(
                     text = text,
-                    style = size.textStyle
+                    style = size.textStyle,
                 )
             }
         }
-
         KivoButtonStyle.Outlined -> {
             OutlinedButton(
                 onClick = onClick,
@@ -104,11 +111,11 @@ fun KivoButton(
                 colors = buttonColors,
                 border = border,
                 contentPadding = size.contentPadding,
-                interactionSource = interactionSource
+                interactionSource = interactionSource,
             ) {
                 Text(
                     text = text,
-                    style = size.textStyle
+                    style = size.textStyle,
                 )
             }
         }
@@ -120,7 +127,7 @@ fun KivoButton(
  */
 enum class KivoButtonStyle {
     Filled,
-    Outlined
+    Outlined,
 }
 
 /**
@@ -131,34 +138,34 @@ sealed class KivoButtonSize(
     val width: androidx.compose.ui.unit.Dp? = null,
     val contentPadding: PaddingValues,
     val textStyle: TextStyle,
-    val shape: Shape
+    val shape: Shape,
 ) {
     data object ExtraLarge : KivoButtonSize(
         height = 56.dp,
         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 16.dp),
         textStyle = TextStyle(),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
     )
 
     data object Large : KivoButtonSize(
         height = 48.dp,
         contentPadding = PaddingValues(horizontal = 20.dp, vertical = 12.dp),
         textStyle = TextStyle(),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
     )
 
     data object Medium : KivoButtonSize(
         height = 40.dp,
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
         textStyle = TextStyle(),
-        shape = RoundedCornerShape(6.dp)
+        shape = RoundedCornerShape(6.dp),
     )
 
     data object Small : KivoButtonSize(
         height = 32.dp,
         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
         textStyle = TextStyle(),
-        shape = RoundedCornerShape(6.dp)
+        shape = RoundedCornerShape(6.dp),
     )
 
     // Icon-only button variants
@@ -167,7 +174,7 @@ sealed class KivoButtonSize(
         width = 48.dp,
         contentPadding = PaddingValues(12.dp),
         textStyle = TextStyle(),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
     )
 
     data object IconMedium : KivoButtonSize(
@@ -175,7 +182,7 @@ sealed class KivoButtonSize(
         width = 40.dp,
         contentPadding = PaddingValues(8.dp),
         textStyle = TextStyle(),
-        shape = RoundedCornerShape(6.dp)
+        shape = RoundedCornerShape(6.dp),
     )
 
     data object IconSmall : KivoButtonSize(
@@ -183,7 +190,7 @@ sealed class KivoButtonSize(
         width = 32.dp,
         contentPadding = PaddingValues(6.dp),
         textStyle = TextStyle(),
-        shape = RoundedCornerShape(6.dp)
+        shape = RoundedCornerShape(6.dp),
     )
 }
 
@@ -195,14 +202,13 @@ data class KivoButtonColors(
     val containerColor: Color,
     val contentColor: Color,
     val disabledContainerColor: Color,
-    val disabledContentColor: Color
+    val disabledContentColor: Color,
 )
 
 /**
  * Default values for KivoButton
  */
 object KivoButtonDefaults {
-
     /**
      * Creates default colors for primary button
      */
@@ -211,55 +217,60 @@ object KivoButtonDefaults {
         containerColor: Color = ThinkivoColors.Primary,
         contentColor: Color = ThinkivoColors.White,
         disabledContainerColor: Color = ThinkivoColors.Gray300,
-        disabledContentColor: Color = ThinkivoColors.Gray500
-    ): KivoButtonColors = KivoButtonColors(
-        containerColor = containerColor,
-        contentColor = contentColor,
-        disabledContainerColor = disabledContainerColor,
-        disabledContentColor = disabledContentColor
-    )
+        disabledContentColor: Color = ThinkivoColors.Gray500,
+    ): KivoButtonColors =
+        KivoButtonColors(
+            containerColor = containerColor,
+            contentColor = contentColor,
+            disabledContainerColor = disabledContainerColor,
+            disabledContentColor = disabledContentColor,
+        )
 
     /**
      * Creates colors for danger/destructive actions
      */
     @Composable
-    fun dangerColors(): KivoButtonColors = KivoButtonColors(
-        containerColor = ThinkivoColors.Danger,
-        contentColor = ThinkivoColors.White,
-        disabledContainerColor = ThinkivoColors.Gray300,
-        disabledContentColor = ThinkivoColors.Gray500
-    )
+    fun dangerColors(): KivoButtonColors =
+        KivoButtonColors(
+            containerColor = ThinkivoColors.Danger,
+            contentColor = ThinkivoColors.White,
+            disabledContainerColor = ThinkivoColors.Gray300,
+            disabledContentColor = ThinkivoColors.Gray500,
+        )
 
     /**
      * Creates colors for success actions
      */
     @Composable
-    fun successColors(): KivoButtonColors = KivoButtonColors(
-        containerColor = ThinkivoColors.Success,
-        contentColor = ThinkivoColors.White,
-        disabledContainerColor = ThinkivoColors.Gray300,
-        disabledContentColor = ThinkivoColors.Gray500
-    )
+    fun successColors(): KivoButtonColors =
+        KivoButtonColors(
+            containerColor = ThinkivoColors.Success,
+            contentColor = ThinkivoColors.White,
+            disabledContainerColor = ThinkivoColors.Gray300,
+            disabledContentColor = ThinkivoColors.Gray500,
+        )
 
     /**
      * Creates colors for warning actions
      */
     @Composable
-    fun warningColors(): KivoButtonColors = KivoButtonColors(
-        containerColor = ThinkivoColors.Warning,
-        contentColor = ThinkivoColors.Gray900,
-        disabledContainerColor = ThinkivoColors.Gray300,
-        disabledContentColor = ThinkivoColors.Gray500
-    )
+    fun warningColors(): KivoButtonColors =
+        KivoButtonColors(
+            containerColor = ThinkivoColors.Warning,
+            contentColor = ThinkivoColors.Gray900,
+            disabledContainerColor = ThinkivoColors.Gray300,
+            disabledContentColor = ThinkivoColors.Gray500,
+        )
 
     /**
      * Creates colors for secondary/neutral actions
      */
     @Composable
-    fun secondaryColors(): KivoButtonColors = KivoButtonColors(
-        containerColor = ThinkivoColors.Gray200,
-        contentColor = ThinkivoColors.Gray900,
-        disabledContainerColor = ThinkivoColors.Gray300,
-        disabledContentColor = ThinkivoColors.Gray500
-    )
+    fun secondaryColors(): KivoButtonColors =
+        KivoButtonColors(
+            containerColor = ThinkivoColors.Gray200,
+            contentColor = ThinkivoColors.Gray900,
+            disabledContainerColor = ThinkivoColors.Gray300,
+            disabledContentColor = ThinkivoColors.Gray500,
+        )
 }
