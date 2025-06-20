@@ -14,4 +14,4 @@ sealed class LoginEvent {
     object SignUp : LoginEvent()
 
     object GoogleLogin : LoginEvent()
-} 
+}

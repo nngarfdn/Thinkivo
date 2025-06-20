@@ -23,4 +23,4 @@ class LoginViewModel {
             else -> Unit
         }
     }
-} 
+}

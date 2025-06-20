@@ -32,4 +32,4 @@ class RegisterViewModel {
             else -> Unit
         }
     }
-} 
+}

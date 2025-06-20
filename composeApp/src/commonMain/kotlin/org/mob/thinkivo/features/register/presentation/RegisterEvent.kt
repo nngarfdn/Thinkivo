@@ -18,4 +18,4 @@ sealed class RegisterEvent {
     object Login : RegisterEvent()
 
     object GoogleLogin : RegisterEvent()
-} 
+}

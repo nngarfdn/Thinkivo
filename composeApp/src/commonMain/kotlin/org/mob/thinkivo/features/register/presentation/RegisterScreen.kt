@@ -435,4 +435,4 @@ private fun SignInSection(onLoginClick: () -> Unit) {
             )
         }
     }
-} 
+}
