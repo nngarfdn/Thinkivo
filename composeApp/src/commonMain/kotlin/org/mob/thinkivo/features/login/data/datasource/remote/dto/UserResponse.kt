@@ -8,4 +8,4 @@ data class UserResponse(
     val fullName: String,
     val email: String,
     val token: String,
-) 
+)
