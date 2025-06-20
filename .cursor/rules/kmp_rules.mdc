@@ -3,6 +3,11 @@ description:
 globs: 
 alwaysApply: true
 ---
+---
+description: 
+globs: 
+alwaysApply: true
+---
 # KMP Compose Multiplatform Coding Rules
 
 ## Table of Contents
@@ -85,6 +90,8 @@ alwaysApply: true
 
 ### Example Structure
 
+A robust, feature-driven structure is critical for scalability and maintainability. This example details a more granular approach to Clean Architecture, emphasizing a clear separation of concerns, especially between the data and domain layers.
+
 ```
 composeApp/
   src/
@@ -95,29 +102,65 @@ composeApp/
             thinkivo/
               features/
                 login/
+                  // Data Layer: Handles all data operations and sources.
                   data/
-                    LoginRepository.kt
+                    // Datasource: Abstracts the origin of data (network, database, etc.).
+                    datasource/
+                      local/
+                        // Manages cached or persistent data (e.g., using SQLDelight).
+                        LoginLocalDataSource.kt
+                      remote/
+                        // Manages network API calls (e.g., using Ktor).
+                        LoginRemoteDataSource.kt
+                        // DTOs: Data Transfer Objects for network requests/responses.
+                        dto/
+                          LoginRequest.kt
+                          UserResponse.kt
+                    // Mapper: Translates data between layers (e.g., DTO to Domain Model).
+                    mapper/
+                      UserMapper.kt
+                    // Repository Implementation: Implements the domain repository interface.
+                    // It orchestrates data from various datasources.
+                    repository/
+                      LoginRepositoryImpl.kt
+                  
+                  // Domain Layer: Contains core business logic, independent of other layers.
                   domain/
-                    LoginUseCase.kt
+                    // Model: Represents pure business entities.
+                    model/
+                      User.kt
+                    // Repository Interface: Defines the contract for data operations.
+                    repository/
+                      LoginRepository.kt
+                    // UseCase: Encapsulates a single, specific business rule.
+                    usecase/
+                      LoginUseCase.kt
+                      
+                  // Presentation Layer: Manages UI and user interaction.
                   presentation/
                     LoginScreen.kt
                     LoginViewModel.kt
+                    LoginState.kt
+                    LoginEvent.kt
+                    
+                  // Dependency Injection for the feature module.
                   LoginModule.kt
+                  
+                // Other features like 'profile' would follow the same structure.
                 profile/
                   data/
                   domain/
                   presentation/
                   ProfileModule.kt
-                appointments/
-                  data/
-                  domain/
-                  presentation/
-                  AppointmentsModule.kt
+
+              // Core: Shared code accessible by all features.
               core/
                 navigation/
                 designsystem/
                 utils/
                 di/
+
+    // Android-specific implementations (e.g., platform-specific database driver).
     androidMain/
       kotlin/
         org/
@@ -126,10 +169,12 @@ composeApp/
               features/
                 login/
                   data/
-                    AndroidLoginRepository.kt
-                profile/
-                  data/
-                    AndroidProfileRepository.kt
+                    datasource/
+                      local/
+                        // Actual implementation of local data source for Android.
+                        AndroidLoginLocalDataSource.kt
+                        
+    // iOS-specific implementations.
     iosMain/
       kotlin/
         org/
@@ -138,10 +183,12 @@ composeApp/
               features/
                 login/
                   data/
-                    IosLoginRepository.kt
-                profile/
-                  data/
-                    IosProfileRepository.kt
+                    datasource/
+                      local/
+                        // Actual implementation of local data source for iOS.
+                        IosLoginLocalDataSource.kt
+
+    // Tests for shared business logic.
     commonTest/
       kotlin/
         org/
@@ -149,9 +196,12 @@ composeApp/
             thinkivo/
               features/
                 login/
-                  LoginUseCaseTest.kt
-                profile/
-                  ProfileUseCaseTest.kt
+                  domain/
+                    usecase/
+                      LoginUseCaseTest.kt
+                  data/
+                    repository/
+                      LoginRepositoryImplTest.kt
 ```
 
 ### Guidelines
