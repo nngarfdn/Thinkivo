@@ -7,12 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,8 +15,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import org.mob.thinkivo.kivodesign.theme.KivoTheme
 
@@ -50,22 +42,6 @@ fun KivoTextFieldSample() {
             title = "Default",
             content = {
                 DefaultTextFields()
-            }
-        )
-
-        // Right Icon Section
-        TextFieldSection(
-            title = "Right Icon",
-            content = {
-                RightIconTextFields()
-            }
-        )
-
-        // Left Icon Section
-        TextFieldSection(
-            title = "Left Icon",
-            content = {
-                LeftIconTextFields()
             }
         )
     }
@@ -109,23 +85,26 @@ private fun DefaultTextFields() {
     KivoTextField(
         value = defaultText,
         onValueChange = { defaultText = it },
-        placeholder = "Placeholder",
+        placeholder = "Enter text...",
+        label = "Default Text Field",
         modifier = Modifier.fillMaxWidth()
     )
 
-    // Focused with content
+    // Focused state
     KivoTextField(
         value = focusedText,
         onValueChange = { focusedText = it },
-        placeholder = "Placeholder",
+        placeholder = "Enter text...",
+        label = "Focused Text Field",
         modifier = Modifier.fillMaxWidth()
     )
 
-    // Disabled
+    // Disabled state
     KivoTextField(
         value = disabledText,
         onValueChange = { disabledText = it },
-        placeholder = "Placeholder",
+        placeholder = "Enter text...",
+        label = "Disabled Text Field",
         enabled = false,
         modifier = Modifier.fillMaxWidth()
     )
@@ -134,160 +113,10 @@ private fun DefaultTextFields() {
     KivoTextField(
         value = errorText,
         onValueChange = { errorText = it },
-        placeholder = "Placeholder",
+        placeholder = "Enter text...",
+        label = "Error Text Field",
         isError = true,
-        supportingText = "How dare you!",
+        supportingText = "This field has an error",
         modifier = Modifier.fillMaxWidth()
     )
-}
-
-@Composable
-private fun RightIconTextFields() {
-    var defaultText by remember { mutableStateOf("") }
-    var focusedText by remember { mutableStateOf("Sample text") }
-    var disabledText by remember { mutableStateOf("") }
-    var errorText by remember { mutableStateOf("") }
-
-    // Default with dropdown icon
-    KivoTextField(
-        value = defaultText,
-        onValueChange = { defaultText = it },
-        placeholder = "Placeholder",
-        trailingIcon = Icons.Default.ArrowDropDown,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // Focused with dropdown icon
-    KivoTextField(
-        value = focusedText,
-        onValueChange = { focusedText = it },
-        placeholder = "Placeholder",
-        trailingIcon = Icons.Default.ArrowDropDown,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // Disabled with dropdown icon
-    KivoTextField(
-        value = disabledText,
-        onValueChange = { disabledText = it },
-        placeholder = "Placeholder",
-        trailingIcon = Icons.Default.ArrowDropDown,
-        enabled = false,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // Error state with dropdown icon
-    KivoTextField(
-        value = errorText,
-        onValueChange = { errorText = it },
-        placeholder = "Placeholder",
-        trailingIcon = Icons.Default.ArrowDropDown,
-        isError = true,
-        supportingText = "How dare you!",
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
-@Composable
-private fun LeftIconTextFields() {
-    var defaultText by remember { mutableStateOf("") }
-    var focusedText by remember { mutableStateOf("Sample text") }
-    var disabledText by remember { mutableStateOf("") }
-    var errorText by remember { mutableStateOf("") }
-
-    // Default with leading dropdown icon
-    KivoTextField(
-        value = defaultText,
-        onValueChange = { defaultText = it },
-        placeholder = "Placeholder",
-        leadingIcon = Icons.Default.ArrowDropDown,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // Focused with leading dropdown icon
-    KivoTextField(
-        value = focusedText,
-        onValueChange = { focusedText = it },
-        placeholder = "Placeholder",
-        leadingIcon = Icons.Default.ArrowDropDown,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // Disabled with leading dropdown icon
-    KivoTextField(
-        value = disabledText,
-        onValueChange = { disabledText = it },
-        placeholder = "Placeholder",
-        leadingIcon = Icons.Default.ArrowDropDown,
-        enabled = false,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // Error state with leading dropdown icon
-    KivoTextField(
-        value = errorText,
-        onValueChange = { errorText = it },
-        placeholder = "Placeholder",
-        leadingIcon = Icons.Default.ArrowDropDown,
-        isError = true,
-        supportingText = "How dare you!",
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
-/**
- * Additional usage examples
- */
-@Composable
-fun KivoTextFieldUsageExamples() {
-    var searchText by remember { mutableStateOf("") }
-    var passwordText by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var emailText by remember { mutableStateOf("") }
-
-    Column(
-        modifier = Modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        // Search field
-        KivoTextField(
-            value = searchText,
-            onValueChange = { searchText = it },
-            placeholder = "Search...",
-            leadingIcon = Icons.Default.Search,
-            trailingIcon = if (searchText.isNotEmpty()) Icons.Default.Clear else null,
-            onTrailingIconClick = if (searchText.isNotEmpty()) {
-                { searchText = "" }
-            } else null,
-            label = "Search",
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // Password field
-        KivoTextField(
-            value = passwordText,
-            onValueChange = { passwordText = it },
-            placeholder = "Enter password",
-            label = "Password",
-            trailingIcon = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-            onTrailingIconClick = { passwordVisible = !passwordVisible },
-            visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        // Email field with validation
-        KivoTextField(
-            value = emailText,
-            onValueChange = { emailText = it },
-            placeholder = "Enter email address",
-            label = "Email",
-            isError = emailText.isNotEmpty() && !emailText.contains("@"),
-            supportingText = if (emailText.isNotEmpty() && !emailText.contains("@")) {
-                "Please enter a valid email address"
-            } else {
-                "We'll never share your email"
-            },
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
 }

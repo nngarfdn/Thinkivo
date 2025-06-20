@@ -2,13 +2,8 @@ package org.mob.thinkivo.kivodesign.components.textfield
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,9 +21,8 @@ import org.mob.thinkivo.kivodesign.theme.KivoTheme
 fun KivoTextFieldDemo() {
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState()),
+            .fillMaxWidth()
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         // Title with green accent
@@ -47,21 +41,7 @@ fun KivoTextFieldDemo() {
             }
         )
 
-        // Right Icon Section
-        ContainedTextFieldSection(
-            title = "Right Icon",
-            content = {
-                RightIconContainedFields()
-            }
-        )
 
-        // Left Icon Section
-        ContainedTextFieldSection(
-            title = "Left Icon",
-            content = {
-                LeftIconContainedFields()
-            }
-        )
     }
 }
 
@@ -76,7 +56,7 @@ private fun ContainedTextFieldSection(
         Text(
             text = title,
             style = KivoTheme.typography.H6,
-            color = KivoTheme.colors.onSurface
+            color = KivoTheme.colors.onSurfaceVariant
         )
         
         Column(
@@ -90,9 +70,9 @@ private fun ContainedTextFieldSection(
 @Composable
 private fun DefaultContainedFields() {
     var normalState by remember { mutableStateOf("") }
-    var focusedState by remember { mutableStateOf("") }
+    var focusedState by remember { mutableStateOf("Sample text") }
     var disabledState by remember { mutableStateOf("") }
-    var errorState by remember { mutableStateOf("") }
+    var errorState by remember { mutableStateOf("Sample error text") }
 
     // Normal state
     KivoTextField(
@@ -125,101 +105,7 @@ private fun DefaultContainedFields() {
         onValueChange = { errorState = it },
         placeholder = "Placeholder",
         isError = true,
-        supportingText = "How dare you!",
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
-@Composable
-private fun RightIconContainedFields() {
-    var normalState by remember { mutableStateOf("") }
-    var focusedState by remember { mutableStateOf("") }
-    var disabledState by remember { mutableStateOf("") }
-    var errorState by remember { mutableStateOf("") }
-
-    // Normal state with right icon
-    KivoTextField(
-        value = normalState,
-        onValueChange = { normalState = it },
-        placeholder = "Placeholder",
-        trailingIcon = Icons.Default.ArrowDropDown,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // Focused state with right icon
-    KivoTextField(
-        value = focusedState,
-        onValueChange = { focusedState = it },
-        placeholder = "Placeholder",
-        trailingIcon = Icons.Default.ArrowDropDown,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // Disabled state with right icon
-    KivoTextField(
-        value = disabledState,
-        onValueChange = { disabledState = it },
-        placeholder = "Placeholder",
-        trailingIcon = Icons.Default.ArrowDropDown,
-        enabled = false,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // Error state with right icon
-    KivoTextField(
-        value = errorState,
-        onValueChange = { errorState = it },
-        placeholder = "Placeholder",
-        trailingIcon = Icons.Default.ArrowDropDown,
-        isError = true,
-        supportingText = "How dare you!",
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
-@Composable
-private fun LeftIconContainedFields() {
-    var normalState by remember { mutableStateOf("") }
-    var focusedState by remember { mutableStateOf("") }
-    var disabledState by remember { mutableStateOf("") }
-    var errorState by remember { mutableStateOf("") }
-
-    // Normal state with left icon
-    KivoTextField(
-        value = normalState,
-        onValueChange = { normalState = it },
-        placeholder = "Placeholder",
-        leadingIcon = Icons.Default.ArrowDropDown,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // Focused state with left icon
-    KivoTextField(
-        value = focusedState,
-        onValueChange = { focusedState = it },
-        placeholder = "Placeholder",
-        leadingIcon = Icons.Default.ArrowDropDown,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // Disabled state with left icon
-    KivoTextField(
-        value = disabledState,
-        onValueChange = { disabledState = it },
-        placeholder = "Placeholder",
-        leadingIcon = Icons.Default.ArrowDropDown,
-        enabled = false,
-        modifier = Modifier.fillMaxWidth()
-    )
-
-    // Error state with left icon
-    KivoTextField(
-        value = errorState,
-        onValueChange = { errorState = it },
-        placeholder = "Placeholder",
-        leadingIcon = Icons.Default.ArrowDropDown,
-        isError = true,
-        supportingText = "How dare you!",
+        supportingText = "Error message text",
         modifier = Modifier.fillMaxWidth()
     )
 }
